@@ -1,4 +1,4 @@
-package ru.leisure.imgur.ui.theme
+package ru.leisure.imgur.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
