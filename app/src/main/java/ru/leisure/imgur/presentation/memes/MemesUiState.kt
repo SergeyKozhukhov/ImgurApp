@@ -1,6 +1,6 @@
 package ru.leisure.imgur.presentation.memes
 
-import ru.leisure.imgur.domain.Image
+import ru.leisure.imgur.domain.models.Image
 
 sealed interface MemesUiState {
 

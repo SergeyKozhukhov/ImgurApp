@@ -2,39 +2,45 @@ package ru.leisure.imgur.presentation.memes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineExceptionHandler
+import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ru.leisure.imgur.domain.ImgurRepository
+import ru.leisure.imgur.MyApplication
+import ru.leisure.imgur.domain.ImgurInteractor
+import ru.leisure.imgur.domain.models.DataLoadingException
 
 class MemesViewModel(
-    private val repository: ImgurRepository
+    private val interactor: ImgurInteractor
 ) : ViewModel() {
 
     val uiState: StateFlow<MemesUiState> get() = _uiState.asStateFlow()
     private val _uiState: MutableStateFlow<MemesUiState> = MutableStateFlow(MemesUiState.Loading)
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, e ->
-        _uiState.value = MemesUiState.Error(message = e.toString())
-    }
 
     fun loadMemes() {
-        viewModelScope.launch(exceptionHandler) {
-            val memes = repository.getDefaultMemes()
-            _uiState.value = MemesUiState.Success(memes = memes)
+        viewModelScope.launch {
+            try {
+                val memes = interactor.getDefaultMemes()
+                _uiState.value = MemesUiState.Success(memes = memes)
+            } catch (e: DataLoadingException) {
+                _uiState.value = MemesUiState.Error(message = e.toString())
+            }
         }
     }
 
 
     companion object {
 
-        @Suppress("UNCHECKED_CAST")
-        fun provideFactory(repository: ImgurRepository) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return MemesViewModel(repository) as T
+        val Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+                val diContainer = MyApplication.diContainer(application)
+                return MemesViewModel(interactor = diContainer.imgurInteractor) as T
             }
         }
     }

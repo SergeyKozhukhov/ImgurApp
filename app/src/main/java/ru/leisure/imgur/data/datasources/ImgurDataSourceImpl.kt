@@ -8,6 +8,7 @@ import okhttp3.Request
 import ru.leisure.imgur.BuildConfig
 import ru.leisure.imgur.data.models.BasicEntity
 import ru.leisure.imgur.data.models.ImageEntity
+import ru.leisure.imgur.data.models.ImgurResponseException
 
 class ImgurDataSourceImpl(
     private val okHttpClient: OkHttpClient,
@@ -23,11 +24,11 @@ class ImgurDataSourceImpl(
         val response = okHttpClient.newCall(request).execute()
 
         if (response.isSuccessful) {
-            val result = response.body?.string()
+            val result = response.body?.string() ?: throw ImgurResponseException()
             return objectMapper.readValue(result, typeReference)
         }
 
-        throw IllegalStateException()
+        throw ImgurResponseException()
     }
 
     private fun buildRequest() = Request.Builder()
