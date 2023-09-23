@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import ru.leisure.imgur.data.converters.ImageConverter
 import ru.leisure.imgur.data.datasources.ImgurDataSource
 import ru.leisure.imgur.domain.ImgurRepository
+import ru.leisure.imgur.domain.models.DataLoadingException
 
 class ImgurRepositoryImpl(
     private val dataSource: ImgurDataSource,
@@ -12,7 +13,11 @@ class ImgurRepositoryImpl(
 ) : ImgurRepository {
 
     override suspend fun getDefaultMemes() = withContext(Dispatchers.IO) {
-        val defaultMemes = dataSource.getDefaultMemes()
-        converter.convert(defaultMemes.data)
+        try {
+            val defaultMemes = dataSource.getDefaultMemes()
+            converter.convert(defaultMemes.data)
+        } catch (e: Exception) {
+            throw DataLoadingException(e)
+        }
     }
 }

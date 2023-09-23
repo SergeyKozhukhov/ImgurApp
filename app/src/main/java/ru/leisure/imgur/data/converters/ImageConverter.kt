@@ -1,7 +1,7 @@
 package ru.leisure.imgur.data.converters
 
 import ru.leisure.imgur.data.models.ImageEntity
-import ru.leisure.imgur.domain.Image
+import ru.leisure.imgur.domain.models.Image
 
 class ImageConverter {
 

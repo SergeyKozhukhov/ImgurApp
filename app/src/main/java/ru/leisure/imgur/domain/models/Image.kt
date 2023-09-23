@@ -1,4 +1,4 @@
-package ru.leisure.imgur.domain
+package ru.leisure.imgur.domain.models
 
 data class Image(
     val id: String,
