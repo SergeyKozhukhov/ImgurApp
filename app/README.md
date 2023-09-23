@@ -3,6 +3,7 @@
 ### Open API
 
 1. [Imgur](https://apidocs.imgur.com)
+2. [Imgur: default memes](https://api.imgur.io/endpoints/memegen#defaults)
 
 ### Ways
 
