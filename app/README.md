@@ -3,11 +3,13 @@
 ### Open API
 
 1. [Imgur](https://apidocs.imgur.com)
+2. [Imgur: default memes](https://api.imgur.io/endpoints/memegen#defaults)
 
 ### Ways
 
 1. [Avoid uploading sensitive info to GitHub](https://dev.to/leehendryp/avoid-versioning-api-keys-and-sensitive-info-on-android-here-s-how-56e1)
 2. [Remove private signing information from your project](https://developer.android.com/build/gradle-tips#remove-private-signing-information-from-your-project)
+3. [Create ViewModels with dependencies](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-factories)
 
 ### Tools
 

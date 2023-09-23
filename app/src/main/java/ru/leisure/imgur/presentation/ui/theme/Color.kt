@@ -1,4 +1,4 @@
-package ru.leisure.imgur.ui.theme
+package ru.leisure.imgur.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
