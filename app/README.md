@@ -10,6 +10,8 @@
 1. [Avoid uploading sensitive info to GitHub](https://dev.to/leehendryp/avoid-versioning-api-keys-and-sensitive-info-on-android-here-s-how-56e1)
 2. [Remove private signing information from your project](https://developer.android.com/build/gradle-tips#remove-private-signing-information-from-your-project)
 3. [Create ViewModels with dependencies](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-factories)
+4. [BottomNavBar: material3](https://developer.android.com/jetpack/compose/designsystems/material3#navigation-components)
+5. [BottomNavBar: material](https://developer.android.com/jetpack/compose/navigation#bottom-nav)
 
 ### Tools
 
