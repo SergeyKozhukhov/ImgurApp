@@ -1,6 +1,5 @@
 package ru.leisure.imgur.presentation.memes
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +30,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
 import ru.leisure.imgur.domain.models.Image
+import ru.leisure.imgur.presentation.components.ErrorMessage
+import ru.leisure.imgur.presentation.components.ProgressBar
 
 @Composable
 fun MemesScreen(viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory)) {
@@ -50,12 +50,7 @@ fun MemesScreen(viewModel: MemesViewModel = viewModel(factory = MemesViewModel.F
 
 @Composable
 private fun LoadingUiState() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
+    ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -84,6 +79,7 @@ fun MemeItem(image: Image, modifier: Modifier = Modifier) {
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(image.link)
                     .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -108,11 +104,6 @@ fun MemeItem(image: Image, modifier: Modifier = Modifier) {
 
 @Composable
 private fun ErrorUiState(message: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = message)
-    }
+    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }
 

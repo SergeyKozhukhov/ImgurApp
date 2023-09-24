@@ -3,6 +3,7 @@ package ru.leisure.imgur.di
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import ru.leisure.imgur.data.ImgurRepositoryImpl
+import ru.leisure.imgur.data.converters.GalleryAlbumConverter
 import ru.leisure.imgur.data.converters.ImageConverter
 import ru.leisure.imgur.data.datasources.ImgurDataSource
 import ru.leisure.imgur.data.datasources.ImgurDataSourceImpl
@@ -18,11 +19,14 @@ class DiContainer {
     }
 
 
-    private fun provideImgurRepository(): ImgurRepository =
-        ImgurRepositoryImpl(
+    private fun provideImgurRepository(): ImgurRepository {
+        val imageConverter = ImageConverter()
+        return ImgurRepositoryImpl(
             dataSource = provideImgurDataSource(),
-            converter = ImageConverter()
+            imageConverter = imageConverter,
+            galleryConverter = GalleryAlbumConverter(imageConverter)
         )
+    }
 
     private fun provideImgurDataSource(): ImgurDataSource =
         ImgurDataSourceImpl(

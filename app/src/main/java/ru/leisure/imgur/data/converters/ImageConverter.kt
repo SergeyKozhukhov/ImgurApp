@@ -8,7 +8,7 @@ class ImageConverter {
     fun convert(source: ImageEntity) =
         Image(
             id = source.id,
-            title = source.title,
+            title = source.title.orEmpty(),
             description = source.description,
             name = source.name,
             link = source.link
