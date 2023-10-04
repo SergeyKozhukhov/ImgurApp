@@ -1,5 +1,6 @@
 package ru.leisure.imgur.presentation.memes
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,15 +35,20 @@ import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.ProgressBar
 
 @Composable
-fun MemesScreen(viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory)) {
-    LaunchedEffect(true) {
-        viewModel.loadMemes()
-    }
+fun MemesListScreen(
+    viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory),
+    onItemClick: (String) -> Unit
+) {
+    LaunchedEffect(true) { viewModel.loadMemes() }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (uiState) {
         MemesUiState.Loading -> LoadingUiState()
-        is MemesUiState.Success -> SuccessUiState(memes = (uiState as MemesUiState.Success).memes)
+        is MemesUiState.Success -> SuccessUiState(
+            memes = (uiState as MemesUiState.Success).memes,
+            onItemClick = onItemClick
+        )
+
         is MemesUiState.Error -> ErrorUiState(message = (uiState as MemesUiState.Error).message)
     }
 }
@@ -54,23 +60,30 @@ private fun LoadingUiState() {
 }
 
 @Composable
-private fun SuccessUiState(memes: List<Image>) {
+private fun SuccessUiState(
+    memes: List<Image>,
+    onItemClick: (String) -> Unit
+) {
     LazyColumn {
         items(memes) { image ->
             MemeItem(
-                image, modifier = Modifier
+                image = image,
+                modifier = Modifier
                     .padding(4.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onItemClick = onItemClick
             )
         }
     }
 }
 
 @Composable
-fun MemeItem(image: Image, modifier: Modifier = Modifier) {
+private fun MemeItem(
+    image: Image, modifier: Modifier = Modifier, onItemClick: (String) -> Unit
+) {
     Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+        modifier = modifier.clickable { onItemClick.invoke(image.id) },
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
