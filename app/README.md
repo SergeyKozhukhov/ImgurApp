@@ -34,3 +34,4 @@
 9. [Jackson-core: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-core/2.15.2/jar?eh=)
 10. [Jackson-annotations: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-annotations/2.15.2/jar)
 11. [Jackson-databind: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-databind/2.15.2/jar)
+12. [Dagger2: KSP](https://dagger.dev/dev-guide/ksp)

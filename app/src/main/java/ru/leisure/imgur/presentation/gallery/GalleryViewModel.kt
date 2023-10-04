@@ -40,8 +40,8 @@ class GalleryViewModel(
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
-                val diContainer = MyApplication.diContainer(application)
-                return GalleryViewModel(interactor = diContainer.imgurInteractor) as T
+                val appComponent = MyApplication.appComponent(application)
+                return GalleryViewModel(interactor = appComponent.imgurInteractor) as T
             }
         }
     }

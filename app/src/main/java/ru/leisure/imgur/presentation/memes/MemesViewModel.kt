@@ -39,8 +39,8 @@ class MemesViewModel(
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
-                val diContainer = MyApplication.diContainer(application)
-                return MemesViewModel(interactor = diContainer.imgurInteractor) as T
+                val appComponent = MyApplication.appComponent(application)
+                return MemesViewModel(interactor = appComponent.imgurInteractor) as T
             }
         }
     }
