@@ -1,6 +1,9 @@
 package ru.leisure.imgur.presentation.memes
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,17 +39,20 @@ private fun LoadingUiState() {
     ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SuccessUiState(
     imageId: String,
     memes: List<Image>,
 ) {
-    memes.find { it.id == imageId }?.let { image ->
-        MemeItem(
-            image,
-            modifier = Modifier
-                .fillMaxSize(),
-        )
+    memes.indexOfFirst { it.id == imageId }.takeIf { it > 0 }?.let { initIndex ->
+        val pagerState = rememberPagerState(initialPage = initIndex, pageCount = { memes.size })
+        HorizontalPager(state = pagerState) { index ->
+            MemeItem(
+                image = memes[index],
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 
