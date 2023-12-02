@@ -4,12 +4,18 @@
 
 1. [Imgur](https://apidocs.imgur.com)
 2. [Imgur: default memes](https://api.imgur.io/endpoints/memegen#defaults)
+3. [Imgur: gallery](https://api.imgur.io/endpoints/gallery)
 
 ### Ways
 
 1. [Avoid uploading sensitive info to GitHub](https://dev.to/leehendryp/avoid-versioning-api-keys-and-sensitive-info-on-android-here-s-how-56e1)
 2. [Remove private signing information from your project](https://developer.android.com/build/gradle-tips#remove-private-signing-information-from-your-project)
 3. [Create ViewModels with dependencies](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-factories)
+4. [BottomNavBar: material3](https://developer.android.com/jetpack/compose/designsystems/material3#navigation-components)
+5. [BottomNavBar: material](https://developer.android.com/jetpack/compose/navigation#bottom-nav)
+6. [Nested navigation](https://developer.android.com/jetpack/compose/navigation#nested-nav)
+7. [Navigation graph: SharedViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-apis#vm-api-navgraph)
+8. [Nested navigation: SharedViewModel](https://developer.android.com/jetpack/compose/libraries#hilt-navigation)
 
 ### Tools
 
@@ -28,3 +34,4 @@
 9. [Jackson-core: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-core/2.15.2/jar?eh=)
 10. [Jackson-annotations: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-annotations/2.15.2/jar)
 11. [Jackson-databind: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-databind/2.15.2/jar)
+12. [Dagger2: KSP](https://dagger.dev/dev-guide/ksp)

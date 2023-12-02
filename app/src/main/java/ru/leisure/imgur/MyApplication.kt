@@ -2,20 +2,21 @@ package ru.leisure.imgur
 
 import android.app.Application
 import android.content.Context
-import ru.leisure.imgur.di.DiContainer
+import ru.leisure.imgur.di.AppComponent
+import ru.leisure.imgur.di.DaggerAppComponent
 
 class MyApplication : Application() {
 
-    lateinit var diContainer: DiContainer
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-        diContainer = DiContainer()
+        appComponent = DaggerAppComponent.create()
     }
 
     companion object {
 
-        fun diContainer(context: Context) =
-            (context.applicationContext as MyApplication).diContainer
+        fun appComponent(context: Context) =
+            (context.applicationContext as MyApplication).appComponent
     }
 }

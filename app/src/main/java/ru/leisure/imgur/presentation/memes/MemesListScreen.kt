@@ -1,6 +1,6 @@
 package ru.leisure.imgur.presentation.memes
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,17 +31,24 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
 import ru.leisure.imgur.domain.models.Image
+import ru.leisure.imgur.presentation.components.ErrorMessage
+import ru.leisure.imgur.presentation.components.ProgressBar
 
 @Composable
-fun MemesScreen(viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory)) {
-    LaunchedEffect(true) {
-        viewModel.loadMemes()
-    }
+fun MemesListScreen(
+    viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory),
+    onItemClick: (String) -> Unit
+) {
+    LaunchedEffect(true) { viewModel.loadMemes() }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (uiState) {
         MemesUiState.Loading -> LoadingUiState()
-        is MemesUiState.Success -> SuccessUiState(memes = (uiState as MemesUiState.Success).memes)
+        is MemesUiState.Success -> SuccessUiState(
+            memes = (uiState as MemesUiState.Success).memes,
+            onItemClick = onItemClick
+        )
+
         is MemesUiState.Error -> ErrorUiState(message = (uiState as MemesUiState.Error).message)
     }
 }
@@ -50,32 +56,34 @@ fun MemesScreen(viewModel: MemesViewModel = viewModel(factory = MemesViewModel.F
 
 @Composable
 private fun LoadingUiState() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
+    ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
-private fun SuccessUiState(memes: List<Image>) {
+private fun SuccessUiState(
+    memes: List<Image>,
+    onItemClick: (String) -> Unit
+) {
     LazyColumn {
         items(memes) { image ->
             MemeItem(
-                image, modifier = Modifier
+                image = image,
+                modifier = Modifier
                     .padding(4.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onItemClick = onItemClick
             )
         }
     }
 }
 
 @Composable
-fun MemeItem(image: Image, modifier: Modifier = Modifier) {
+private fun MemeItem(
+    image: Image, modifier: Modifier = Modifier, onItemClick: (String) -> Unit
+) {
     Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+        modifier = modifier.clickable { onItemClick.invoke(image.id) },
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -84,6 +92,7 @@ fun MemeItem(image: Image, modifier: Modifier = Modifier) {
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(image.link)
                     .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -108,11 +117,6 @@ fun MemeItem(image: Image, modifier: Modifier = Modifier) {
 
 @Composable
 private fun ErrorUiState(message: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = message)
-    }
+    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }
 

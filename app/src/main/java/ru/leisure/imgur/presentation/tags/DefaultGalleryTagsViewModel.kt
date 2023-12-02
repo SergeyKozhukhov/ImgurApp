@@ -1,4 +1,4 @@
-package ru.leisure.imgur.presentation.memes
+package ru.leisure.imgur.presentation.tags
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,21 +13,20 @@ import ru.leisure.imgur.MyApplication
 import ru.leisure.imgur.domain.ImgurInteractor
 import ru.leisure.imgur.domain.models.DataLoadingException
 
-class MemesViewModel(
+class DefaultGalleryTagsViewModel(
     private val interactor: ImgurInteractor
 ) : ViewModel() {
 
-    val uiState: StateFlow<MemesUiState> get() = _uiState.asStateFlow()
-    private val _uiState: MutableStateFlow<MemesUiState> = MutableStateFlow(MemesUiState.Loading)
+    val uiState: StateFlow<DefaultGalleryTagsUiState> get() = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<DefaultGalleryTagsUiState> = MutableStateFlow(DefaultGalleryTagsUiState.Loading)
 
-
-    fun loadMemes() {
+    fun loadGalleryTags() {
         viewModelScope.launch {
             try {
-                val memes = interactor.getDefaultMemes()
-                _uiState.value = MemesUiState.Success(memes = memes)
+                val tags = interactor.getDefaultGalleryTags()
+                _uiState.value = DefaultGalleryTagsUiState.Success(tags = tags)
             } catch (e: DataLoadingException) {
-                _uiState.value = MemesUiState.Error(message = e.toString())
+                _uiState.value = DefaultGalleryTagsUiState.Error(message = e.toString())
             }
         }
     }
@@ -40,7 +39,7 @@ class MemesViewModel(
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
                 val appComponent = MyApplication.appComponent(application)
-                return MemesViewModel(interactor = appComponent.imgurInteractor) as T
+                return DefaultGalleryTagsViewModel(interactor = appComponent.imgurInteractor) as T
             }
         }
     }

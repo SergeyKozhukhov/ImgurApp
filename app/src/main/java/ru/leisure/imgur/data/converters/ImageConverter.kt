@@ -8,10 +8,14 @@ class ImageConverter {
     fun convert(source: ImageEntity) =
         Image(
             id = source.id,
-            title = source.title,
+            title = source.title.orEmpty(),
             description = source.description,
+            type = source.type,
             name = source.name,
-            link = source.link
+            section = source.section,
+            link = source.link,
+            gifv = source.gifv,
+            mp4 = source.mp4
         )
 
     fun convert(sourceList: List<ImageEntity>) = sourceList.map { convert(it) }

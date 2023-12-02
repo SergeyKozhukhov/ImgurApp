@@ -6,8 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ImageEntity(
     @JsonProperty("id") val id: String,
-    @JsonProperty("title") val title: String,
+    @JsonProperty("title") val title: String?,
     @JsonProperty("description") val description: String?,
+    @JsonProperty("type") val type: String,
     @JsonProperty("name") val name: String?,
-    @JsonProperty("link") val link: String
+    @JsonProperty("section") val section: String?,
+    @JsonProperty("link") val link: String,
+    @JsonProperty("gifv") val gifv: String?,
+    @JsonProperty("mp4") val mp4: String?
 )
