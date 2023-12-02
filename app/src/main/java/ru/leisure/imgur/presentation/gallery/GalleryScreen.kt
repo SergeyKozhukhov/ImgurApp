@@ -1,5 +1,6 @@
 package ru.leisure.imgur.presentation.gallery
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -103,14 +105,23 @@ fun GalleryAlbumItem(galleryAlbum: GalleryAlbum, modifier: Modifier = Modifier) 
                             tint = Color.White
                         )
                     }
+                    Text(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.TopStart)
+                            .background(color = Color.LightGray, shape = CircleShape)
+                            .padding(2.dp),
+                        text = galleryAlbum.imagesCount.toString(),
+                        color = Color.White,
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
             }
-            Column {
+            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 SmallText(text = galleryAlbum.title)
                 SmallText(text = if (galleryAlbum.isAlbum) "It is an album" else "It is not an album")
                 SmallText(text = "Popularity score: ${galleryAlbum.score}")
                 SmallText(text = "Number of comments: ${galleryAlbum.commentCount}")
-                SmallText(text = "The total number of images: ${galleryAlbum.imagesCount}")
             }
         }
     }
