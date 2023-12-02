@@ -19,12 +19,13 @@ class GalleryViewModel(
 
     val uiState: StateFlow<GalleryUiState> get() = _uiState.asStateFlow()
     private val _uiState: MutableStateFlow<GalleryUiState> =
-        MutableStateFlow(GalleryUiState.Loading)
+        MutableStateFlow(GalleryUiState.Idle)
 
 
     fun loadGallery() {
         viewModelScope.launch {
             try {
+                _uiState.value = GalleryUiState.Loading
                 val gallery = interactor.getGallery()
                 _uiState.value = GalleryUiState.Success(gallery = gallery)
             } catch (e: DataLoadingException) {
@@ -33,6 +34,17 @@ class GalleryViewModel(
         }
     }
 
+    fun searchGallery(query: String) {
+        viewModelScope.launch {
+            try {
+                _uiState.value = GalleryUiState.Loading
+                val gallery = interactor.searchGallery(query)
+                _uiState.value = GalleryUiState.Success(gallery = gallery)
+            } catch (e: DataLoadingException) {
+                _uiState.value = GalleryUiState.Error(message = e.toString())
+            }
+        }
+    }
 
     companion object {
 

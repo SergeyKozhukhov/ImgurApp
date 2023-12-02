@@ -16,4 +16,7 @@ interface ImgurRepository {
 
     @Throws(DataLoadingException::class, CancellationException::class)
     suspend fun getDefaultGalleryTags(): GalleryTags
+
+    @Throws(DataLoadingException::class, CancellationException::class)
+    suspend fun searchGallery(query: String): List<GalleryAlbum>
 }

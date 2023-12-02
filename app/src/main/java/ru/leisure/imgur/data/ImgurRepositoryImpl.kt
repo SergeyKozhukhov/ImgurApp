@@ -49,4 +49,15 @@ class ImgurRepositoryImpl(
             throw DataLoadingException(e)
         }
     }
+
+    override suspend fun searchGallery(query: String) = withContext(Dispatchers.IO) {
+        try {
+            val gallery = dataSource.searchGallery(query)
+            galleryConverter.convert(gallery.data)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            throw DataLoadingException(e)
+        }
+    }
 }

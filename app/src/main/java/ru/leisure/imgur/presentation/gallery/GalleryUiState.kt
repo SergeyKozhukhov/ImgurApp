@@ -6,6 +6,8 @@ import ru.leisure.imgur.domain.models.GalleryAlbum
 @Immutable
 sealed interface GalleryUiState {
 
+    object Idle : GalleryUiState
+
     object Loading : GalleryUiState
 
     data class Success(val gallery: List<GalleryAlbum>) : GalleryUiState

@@ -38,4 +38,13 @@ interface ImgurDataSource {
         ImgurResponseException::class
     )
     fun getDefaultGalleryTags(): BasicEntity<GalleryTagsEntity>
+
+    @WorkerThread
+    @Throws(
+        IOException::class,
+        JsonProcessingException::class,
+        JsonMappingException::class,
+        ImgurResponseException::class
+    )
+    fun searchGallery(query: String): BasicEntity<List<GalleryAlbumEntity>>
 }

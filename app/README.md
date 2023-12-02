@@ -5,6 +5,7 @@
 1. [Imgur](https://apidocs.imgur.com)
 2. [Imgur: default memes](https://api.imgur.io/endpoints/memegen#defaults)
 3. [Imgur: gallery](https://api.imgur.io/endpoints/gallery)
+4. [Imgur: search](https://apidocs.imgur.com/#3c981acf-47aa-488f-b068-269f65aee3ce)
 
 ### Ways
 

@@ -1,6 +1,8 @@
 package ru.leisure.imgur.data.datasources
 
+import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -12,6 +14,7 @@ import ru.leisure.imgur.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.data.models.GalleryTagsEntity
 import ru.leisure.imgur.data.models.ImageEntity
 import ru.leisure.imgur.data.models.ImgurResponseException
+import java.io.IOException
 
 class ImgurDataSourceImpl(
     private val okHttpClient: OkHttpClient,
@@ -29,34 +32,32 @@ class ImgurDataSourceImpl(
     private val defaultGalleryTagsTypeReference =
         object : TypeReference<BasicEntity<GalleryTagsEntity>>() {}
 
-    override fun getDefaultMemes(): BasicEntity<List<ImageEntity>> {
-        val response = okHttpClient.newCall(defaultMemesRequest).execute()
+    override fun getDefaultMemes(): BasicEntity<List<ImageEntity>> =
+        makeRequest(defaultMemesRequest, defaultMemesTypeReference)
 
-        if (response.isSuccessful) {
-            val result = response.body?.string() ?: throw ImgurResponseException()
-            return objectMapper.readValue(result, defaultMemesTypeReference)
-        }
+    override fun getGallery(): BasicEntity<List<GalleryAlbumEntity>> =
+        makeRequest(galleryRequest, galleryTypeReference)
 
-        throw ImgurResponseException()
+    override fun getDefaultGalleryTags(): BasicEntity<GalleryTagsEntity> =
+        makeRequest(tagsRequest, defaultGalleryTagsTypeReference)
+
+    override fun searchGallery(query: String): BasicEntity<List<GalleryAlbumEntity>> {
+        val request = buildRequest("$SEARCH_GALLERY_URL$query".toHttpUrl())
+        return makeRequest(request, galleryTypeReference)
     }
 
-    override fun getGallery(): BasicEntity<List<GalleryAlbumEntity>> {
-        val response = okHttpClient.newCall(galleryRequest).execute()
+    @Throws(
+        IOException::class,
+        JsonProcessingException::class,
+        JsonMappingException::class,
+        ImgurResponseException::class
+    )
+    private fun <T> makeRequest(request: Request, reference: TypeReference<T>): T {
+        val response = okHttpClient.newCall(request).execute()
 
         if (response.isSuccessful) {
             val result = response.body?.string() ?: throw ImgurResponseException()
-            return objectMapper.readValue(result, galleryTypeReference)
-        }
-
-        throw ImgurResponseException()
-    }
-
-    override fun getDefaultGalleryTags(): BasicEntity<GalleryTagsEntity> {
-        val response = okHttpClient.newCall(tagsRequest).execute()
-
-        if (response.isSuccessful) {
-            val result = response.body?.string() ?: throw ImgurResponseException()
-            return objectMapper.readValue(result, defaultGalleryTagsTypeReference)
+            return objectMapper.readValue(result, reference)
         }
 
         throw ImgurResponseException()
@@ -76,5 +77,6 @@ class ImgurDataSourceImpl(
         const val DEFAULT_MEMES_URL = "https://api.imgur.com/3/memegen/defaults"
         const val GALLERY_URL = "https://api.imgur.com/3/gallery/hot"
         const val DEFAULT_GALLERY_TAGS_URL = "https://api.imgur.com/3/tags"
+        const val SEARCH_GALLERY_URL = "https://api.imgur.com/3/gallery/search?q="
     }
 }
