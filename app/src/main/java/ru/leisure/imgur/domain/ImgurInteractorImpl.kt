@@ -5,4 +5,6 @@ class ImgurInteractorImpl(private val repository: ImgurRepository) : ImgurIntera
     override suspend fun getDefaultMemes() = repository.getDefaultMemes()
 
     override suspend fun getGallery() = repository.getGallery()
+
+    override suspend fun getDefaultGalleryTags() = repository.getDefaultGalleryTags()
 }

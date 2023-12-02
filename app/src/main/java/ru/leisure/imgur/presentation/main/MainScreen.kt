@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.leisure.imgur.presentation.gallery.GalleryScreen
 import ru.leisure.imgur.presentation.memes.memesGraph
+import ru.leisure.imgur.presentation.tags.TagsScreen
 import ru.leisure.imgur.presentation.ui.theme.ImgurAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,6 +67,7 @@ private fun MainScreenContent(navController: NavHostController, modifier: Modifi
         modifier = modifier
     ) {
         composable(MainScreenContent.Gallery.route) { GalleryScreen() }
+        composable(MainScreenContent.DefaultGalleryTags.route) { TagsScreen() }
         memesGraph(navController = navController)
     }
 }

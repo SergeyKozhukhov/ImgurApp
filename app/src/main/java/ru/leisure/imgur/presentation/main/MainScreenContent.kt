@@ -3,6 +3,7 @@ package ru.leisure.imgur.presentation.main
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class MainScreenContent(
@@ -16,6 +17,12 @@ sealed class MainScreenContent(
         text = "Gallery"
     )
 
+    object DefaultGalleryTags : MainScreenContent(
+        route = "tags",
+        icon = Icons.Filled.Menu,
+        text = "Tags"
+    )
+
     object Memes : MainScreenContent(
         route = "memes",
         icon = Icons.Filled.Face,
@@ -23,6 +30,6 @@ sealed class MainScreenContent(
     )
 
     companion object {
-        val bottomDestinations = listOf(Gallery, Memes)
+        val bottomDestinations = listOf(Gallery, DefaultGalleryTags, Memes)
     }
 }

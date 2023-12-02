@@ -4,7 +4,7 @@ import ru.leisure.imgur.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.domain.models.GalleryAlbum
 
 class GalleryAlbumConverter(
-    private val imageConverter: ImageConverter
+    private val imageConverter: ImageConverter = ImageConverter()
 ) {
 
     fun convert(source: GalleryAlbumEntity) =
