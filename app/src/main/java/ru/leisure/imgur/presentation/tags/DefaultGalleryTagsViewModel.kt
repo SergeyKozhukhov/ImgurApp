@@ -18,9 +18,10 @@ class DefaultGalleryTagsViewModel(
 ) : ViewModel() {
 
     val uiState: StateFlow<DefaultGalleryTagsUiState> get() = _uiState.asStateFlow()
-    private val _uiState: MutableStateFlow<DefaultGalleryTagsUiState> = MutableStateFlow(DefaultGalleryTagsUiState.Loading)
+    private val _uiState: MutableStateFlow<DefaultGalleryTagsUiState> = MutableStateFlow(DefaultGalleryTagsUiState.Idle)
 
     fun loadGalleryTags() {
+        if (uiState.value != DefaultGalleryTagsUiState.Idle) return
         viewModelScope.launch {
             try {
                 val tags = interactor.getDefaultGalleryTags()

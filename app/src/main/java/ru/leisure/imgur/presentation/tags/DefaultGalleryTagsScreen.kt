@@ -25,7 +25,7 @@ import ru.leisure.imgur.domain.models.GalleryTags
 import ru.leisure.imgur.domain.models.Tag
 import ru.leisure.imgur.domain.models.Topic
 import ru.leisure.imgur.presentation.components.ErrorMessage
-import ru.leisure.imgur.presentation.components.GalleryAlbumItem
+import ru.leisure.imgur.presentation.components.GalleryItemContent
 import ru.leisure.imgur.presentation.components.ProgressBar
 
 
@@ -35,7 +35,7 @@ fun TagsScreen(viewModel: DefaultGalleryTagsViewModel = viewModel(factory = Defa
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (uiState) {
-        DefaultGalleryTagsUiState.Loading -> LoadingUiState()
+        DefaultGalleryTagsUiState.Idle, DefaultGalleryTagsUiState.Loading -> LoadingUiState()
         is DefaultGalleryTagsUiState.Success -> SuccessUiState(
             galleryTags = (uiState as DefaultGalleryTagsUiState.Success).tags,
         )
@@ -104,7 +104,7 @@ private fun TopicItem(topic: Topic, modifier: Modifier = Modifier) {
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleMedium
         )
-        GalleryAlbumItem(
+        GalleryItemContent(
             topic.topPost, modifier = Modifier
                 .padding(4.dp)
                 .width(300.dp)

@@ -8,5 +8,5 @@ data class TopicEntity(
     @JsonProperty("id") val id: Int,
     @JsonProperty("name") val name: String,
     @JsonProperty("description") val description: String,
-    @JsonProperty("topPost") val topPost: GalleryAlbumEntity
+    @JsonProperty("topPost") val topPost: GalleryItemEntity
 )

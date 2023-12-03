@@ -36,3 +36,7 @@
 10. [Jackson-annotations: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-annotations/2.15.2/jar)
 11. [Jackson-databind: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-databind/2.15.2/jar)
 12. [Dagger2: KSP](https://dagger.dev/dev-guide/ksp)
+
+### Research
+
+1. [Jackson polymorphic deserialization](https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization?ref=igorski.co)

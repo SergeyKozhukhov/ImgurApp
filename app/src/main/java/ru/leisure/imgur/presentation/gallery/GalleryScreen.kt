@@ -22,9 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.leisure.imgur.domain.models.GalleryAlbum
+import ru.leisure.imgur.domain.models.GalleryItem
 import ru.leisure.imgur.presentation.components.ErrorMessage
-import ru.leisure.imgur.presentation.components.GalleryAlbumItem
+import ru.leisure.imgur.presentation.components.GalleryItemContent
 import ru.leisure.imgur.presentation.components.ProgressBar
 
 @Composable
@@ -51,15 +51,16 @@ private fun LoadingUiState() {
 }
 
 @Composable
-private fun SuccessUiState(gallery: List<GalleryAlbum>, onSearchClick: (String) -> Unit) {
+private fun SuccessUiState(gallery: List<GalleryItem>, onSearchClick: (String) -> Unit) {
     Column {
         SearchBar(onSearchClick = onSearchClick)
         LazyColumn {
-            items(gallery) { galleryAlbum ->
-                GalleryAlbumItem(
-                    galleryAlbum, modifier = Modifier
+            items(gallery) { galleryItem ->
+                GalleryItemContent(
+                    modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    galleryItem = galleryItem,
                 )
             }
         }

@@ -1,11 +1,12 @@
 package ru.leisure.imgur.domain.models
 
-data class GalleryAlbum(
+data class GalleryImage(
     override val id: String,
     val title: String,
+    val type: String,
     val link: String,
-    val score: Int,
+    val gifv: String?,
+    val mp4: String?,
     val commentCount: Int,
-    val imagesCount: Int,
-    val images: List<Image>
+    val score: Int
 ) : GalleryItem()

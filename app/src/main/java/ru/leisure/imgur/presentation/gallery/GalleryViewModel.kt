@@ -18,11 +18,11 @@ class GalleryViewModel(
 ) : ViewModel() {
 
     val uiState: StateFlow<GalleryUiState> get() = _uiState.asStateFlow()
-    private val _uiState: MutableStateFlow<GalleryUiState> =
-        MutableStateFlow(GalleryUiState.Idle)
+    private val _uiState: MutableStateFlow<GalleryUiState> = MutableStateFlow(GalleryUiState.Idle)
 
 
     fun loadGallery() {
+        if (uiState.value != GalleryUiState.Idle) return
         viewModelScope.launch {
             try {
                 _uiState.value = GalleryUiState.Loading

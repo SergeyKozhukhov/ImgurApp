@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import ru.leisure.imgur.BuildConfig
 import ru.leisure.imgur.data.models.BasicEntity
-import ru.leisure.imgur.data.models.GalleryAlbumEntity
+import ru.leisure.imgur.data.models.GalleryItemEntity
 import ru.leisure.imgur.data.models.GalleryTagsEntity
 import ru.leisure.imgur.data.models.ImageEntity
 import ru.leisure.imgur.data.models.ImgurResponseException
@@ -28,20 +28,17 @@ class ImgurDataSourceImpl(
     private val defaultMemesTypeReference =
         object : TypeReference<BasicEntity<List<ImageEntity>>>() {}
     private val galleryTypeReference =
-        object : TypeReference<BasicEntity<List<GalleryAlbumEntity>>>() {}
+        object : TypeReference<BasicEntity<List<GalleryItemEntity>>>() {}
     private val defaultGalleryTagsTypeReference =
         object : TypeReference<BasicEntity<GalleryTagsEntity>>() {}
 
-    override fun getDefaultMemes(): BasicEntity<List<ImageEntity>> =
-        makeRequest(defaultMemesRequest, defaultMemesTypeReference)
+    override fun getDefaultMemes() = makeRequest(defaultMemesRequest, defaultMemesTypeReference)
 
-    override fun getGallery(): BasicEntity<List<GalleryAlbumEntity>> =
-        makeRequest(galleryRequest, galleryTypeReference)
+    override fun getGallery() = makeRequest(galleryRequest, galleryTypeReference)
 
-    override fun getDefaultGalleryTags(): BasicEntity<GalleryTagsEntity> =
-        makeRequest(tagsRequest, defaultGalleryTagsTypeReference)
+    override fun getDefaultGalleryTags() = makeRequest(tagsRequest, defaultGalleryTagsTypeReference)
 
-    override fun searchGallery(query: String): BasicEntity<List<GalleryAlbumEntity>> {
+    override fun searchGallery(query: String): BasicEntity<List<GalleryItemEntity>> {
         val request = buildRequest("$SEARCH_GALLERY_URL$query".toHttpUrl())
         return makeRequest(request, galleryTypeReference)
     }

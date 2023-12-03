@@ -13,10 +13,9 @@ class GalleryAlbumConverter(
             title = source.title,
             link = source.link,
             score = source.score,
-            isAlbum = source.isAlbum,
             commentCount = source.commentCount,
             imagesCount = source.imagesCount,
-            images = source.images?.let { imageConverter.convert(it) } ?: emptyList()
+            images = imageConverter.convert(source.images)
         )
 
     fun convert(sourceList: List<GalleryAlbumEntity>) = sourceList.map { convert(it) }
