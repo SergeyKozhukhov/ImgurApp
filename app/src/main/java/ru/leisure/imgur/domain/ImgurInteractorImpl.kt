@@ -9,4 +9,6 @@ class ImgurInteractorImpl(private val repository: ImgurRepository) : ImgurIntera
     override suspend fun getDefaultGalleryTags() = repository.getDefaultGalleryTags()
 
     override suspend fun searchGallery(query: String) = repository.searchGallery(query)
+
+    override suspend fun getComments(id: String) = repository.getComments(id)
 }

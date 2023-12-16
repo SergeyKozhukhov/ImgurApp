@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonMappingException
 import ru.leisure.imgur.data.models.BasicEntity
+import ru.leisure.imgur.data.models.CommentEntity
 import ru.leisure.imgur.data.models.GalleryItemEntity
 import ru.leisure.imgur.data.models.GalleryTagsEntity
 import ru.leisure.imgur.data.models.ImageEntity
@@ -47,4 +48,13 @@ interface ImgurDataSource {
         ImgurResponseException::class
     )
     fun searchGallery(query: String): BasicEntity<List<GalleryItemEntity>>
+
+    @WorkerThread
+    @Throws(
+        IOException::class,
+        JsonProcessingException::class,
+        JsonMappingException::class,
+        ImgurResponseException::class
+    )
+    fun getComments(id: String): BasicEntity<List<CommentEntity>>
 }

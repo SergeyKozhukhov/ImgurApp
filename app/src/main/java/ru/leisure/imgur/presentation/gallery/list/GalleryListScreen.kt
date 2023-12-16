@@ -1,4 +1,4 @@
-package ru.leisure.imgur.presentation.gallery
+package ru.leisure.imgur.presentation.gallery.list
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +26,8 @@ import ru.leisure.imgur.domain.models.GalleryItem
 import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.GalleryItemThumbnail
 import ru.leisure.imgur.presentation.components.ProgressBar
+import ru.leisure.imgur.presentation.gallery.GalleryUiState
+import ru.leisure.imgur.presentation.gallery.GalleryViewModel
 
 @Composable
 fun GalleryListScreen(

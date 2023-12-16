@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import ru.leisure.imgur.BuildConfig
 import ru.leisure.imgur.data.models.BasicEntity
+import ru.leisure.imgur.data.models.CommentEntity
 import ru.leisure.imgur.data.models.GalleryItemEntity
 import ru.leisure.imgur.data.models.GalleryTagsEntity
 import ru.leisure.imgur.data.models.ImageEntity
@@ -31,6 +32,8 @@ class ImgurDataSourceImpl(
         object : TypeReference<BasicEntity<List<GalleryItemEntity>>>() {}
     private val defaultGalleryTagsTypeReference =
         object : TypeReference<BasicEntity<GalleryTagsEntity>>() {}
+    private val commentsTypeReference =
+        object : TypeReference<BasicEntity<List<CommentEntity>>>() {}
 
     override fun getDefaultMemes() = makeRequest(defaultMemesRequest, defaultMemesTypeReference)
 
@@ -41,6 +44,11 @@ class ImgurDataSourceImpl(
     override fun searchGallery(query: String): BasicEntity<List<GalleryItemEntity>> {
         val request = buildRequest("$SEARCH_GALLERY_URL$query".toHttpUrl())
         return makeRequest(request, galleryTypeReference)
+    }
+
+    override fun getComments(id: String): BasicEntity<List<CommentEntity>> {
+        val request = buildRequest(formCommentsUrl(id).toHttpUrl())
+        return makeRequest(request, commentsTypeReference)
     }
 
     @Throws(
@@ -71,9 +79,15 @@ class ImgurDataSourceImpl(
         const val AUTH_HEADER_NAME = "Authorization"
         const val AUTH_HEADER_VALUE = "Client-ID ${BuildConfig.API_KEY}"
 
-        const val DEFAULT_MEMES_URL = "https://api.imgur.com/3/memegen/defaults"
-        const val GALLERY_URL = "https://api.imgur.com/3/gallery/hot"
-        const val DEFAULT_GALLERY_TAGS_URL = "https://api.imgur.com/3/tags"
-        const val SEARCH_GALLERY_URL = "https://api.imgur.com/3/gallery/search?q="
+        const val IMGUR = "https://api.imgur.com"
+        const val GALLERY = "$IMGUR/3/gallery"
+        const val COMMENTS = "comments"
+
+        const val DEFAULT_MEMES_URL = "$IMGUR/3/memegen/defaults"
+        const val GALLERY_URL = "$GALLERY/hot"
+        const val DEFAULT_GALLERY_TAGS_URL = "$IMGUR/3/tags"
+        const val SEARCH_GALLERY_URL = "$GALLERY/search?q="
+
+        fun formCommentsUrl(id: String) = "$GALLERY/$id/$COMMENTS"
     }
 }

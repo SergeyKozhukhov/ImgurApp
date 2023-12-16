@@ -1,4 +1,4 @@
-package ru.leisure.imgur.presentation.gallery
+package ru.leisure.imgur.presentation.gallery.item
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,13 +21,15 @@ import ru.leisure.imgur.domain.models.GalleryImage
 import ru.leisure.imgur.domain.models.GalleryItem
 import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.ProgressBar
+import ru.leisure.imgur.presentation.gallery.GalleryUiState
+import ru.leisure.imgur.presentation.gallery.GalleryViewModel
 
 @Composable
 fun GalleryItemScreen(
     id: String,
-    viewModel: GalleryViewModel = viewModel(factory = GalleryViewModel.Factory)
+    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModel.Factory),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by galleryViewModel.uiState.collectAsStateWithLifecycle()
     when (uiState) {
         GalleryUiState.Idle, GalleryUiState.Loading -> LoadingUiState()
         is GalleryUiState.Success -> SuccessUiState(id, (uiState as GalleryUiState.Success).gallery)
@@ -57,18 +60,27 @@ private fun SuccessUiState(
 @Composable
 private fun GalleryItemContent(
     item: GalleryItem,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: GalleryItemViewModel = viewModel(
+        key = item.id,
+        factory = GalleryItemViewModel.Factory
+    )
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.loadComments(item.id)
+    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (item) {
-        is GalleryAlbum -> GalleryAlbumContent(item, modifier)
-        is GalleryImage -> GalleryImageContent(item, modifier)
+        is GalleryAlbum -> GalleryAlbumContent(item, uiState, modifier)
+        is GalleryImage -> GalleryImageContent(item, uiState, modifier)
     }
 }
 
 @Composable
 private fun GalleryAlbumContent(
     album: GalleryAlbum,
-    modifier: Modifier = Modifier
+    uiState: GalleryItemUiState,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         items(album.images) { image ->
@@ -82,23 +94,29 @@ private fun GalleryAlbumContent(
                 modifier = modifier
             )
         }
+        commentItems(uiState = uiState)
     }
 }
 
 @Composable
 private fun GalleryImageContent(
     image: GalleryImage,
-    modifier: Modifier = Modifier
+    uiState: GalleryItemUiState,
+    modifier: Modifier = Modifier,
 ) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(image.link)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .error(R.drawable.ic_launcher_background)
-            .build(),
-        contentDescription = null,
-        modifier = modifier
-    )
+    LazyColumn(modifier = modifier) {
+        item {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(image.link)
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
+                    .build(),
+                contentDescription = null,
+            )
+        }
+        commentItems(uiState)
+    }
 }
 
 

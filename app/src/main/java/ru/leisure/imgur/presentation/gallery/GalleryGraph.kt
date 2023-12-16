@@ -8,6 +8,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import ru.leisure.imgur.presentation.gallery.item.GalleryItemScreen
+import ru.leisure.imgur.presentation.gallery.list.GalleryListScreen
+import ru.leisure.imgur.presentation.gallery.list.GalleryScreenContent
 import ru.leisure.imgur.presentation.main.MainScreenContent
 
 fun NavGraphBuilder.galleryGraph(navController: NavController) {
@@ -28,7 +31,7 @@ fun NavGraphBuilder.galleryGraph(navController: NavController) {
             backStackEntry.arguments?.getString(GalleryScreenContent.Item.idArg)
                 ?.let { id ->
                     GalleryItemScreen(
-                        viewModel = galleryViewModel(navController, backStackEntry),
+                        galleryViewModel = galleryViewModel(navController, backStackEntry),
                         id = id
                     )
                 }

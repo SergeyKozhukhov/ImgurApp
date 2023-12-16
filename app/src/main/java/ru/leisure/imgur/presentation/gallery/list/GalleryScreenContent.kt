@@ -1,4 +1,4 @@
-package ru.leisure.imgur.presentation.gallery
+package ru.leisure.imgur.presentation.gallery.list
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -10,7 +10,7 @@ sealed class GalleryScreenContent(val route: String) {
 
     object Item : GalleryScreenContent(route = "${MainScreenContent.Gallery.route}-item") {
         const val idArg = "idArg"
-        val routeWithArgs = "${route}/{${idArg}}"
+        val routeWithArgs = "${route}/{$idArg}"
         val arguments = listOf(
             navArgument(idArg) { type = NavType.StringType }
         )
