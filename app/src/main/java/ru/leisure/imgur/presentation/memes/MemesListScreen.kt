@@ -39,7 +39,7 @@ fun MemesListScreen(
     viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory),
     onItemClick: (String) -> Unit
 ) {
-    LaunchedEffect(true) { viewModel.loadMemes() }
+    LaunchedEffect(Unit) { viewModel.loadMemes() }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (uiState) {

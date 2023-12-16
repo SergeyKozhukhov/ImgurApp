@@ -45,7 +45,7 @@ private fun SuccessUiState(
     imageId: String,
     memes: List<Image>,
 ) {
-    memes.indexOfFirst { it.id == imageId }.takeIf { it > 0 }?.let { initIndex ->
+    memes.indexOfFirst { it.id == imageId }.takeIf { it >= 0 }?.let { initIndex ->
         val pagerState = rememberPagerState(initialPage = initIndex, pageCount = { memes.size })
         HorizontalPager(state = pagerState) { index ->
             MemeItem(

@@ -25,12 +25,15 @@ import ru.leisure.imgur.domain.models.GalleryTags
 import ru.leisure.imgur.domain.models.Tag
 import ru.leisure.imgur.domain.models.Topic
 import ru.leisure.imgur.presentation.components.ErrorMessage
-import ru.leisure.imgur.presentation.components.GalleryItemContent
+import ru.leisure.imgur.presentation.components.GalleryItemThumbnail
 import ru.leisure.imgur.presentation.components.ProgressBar
 
 
 @Composable
-fun TagsScreen(viewModel: DefaultGalleryTagsViewModel = viewModel(factory = DefaultGalleryTagsViewModel.Factory)) {
+fun TagsScreen(
+    viewModel: DefaultGalleryTagsViewModel = viewModel(factory = DefaultGalleryTagsViewModel.Factory),
+    onItemClick: (String) -> Unit,
+) {
     LaunchedEffect(Unit) { viewModel.loadGalleryTags() }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -38,6 +41,7 @@ fun TagsScreen(viewModel: DefaultGalleryTagsViewModel = viewModel(factory = Defa
         DefaultGalleryTagsUiState.Idle, DefaultGalleryTagsUiState.Loading -> LoadingUiState()
         is DefaultGalleryTagsUiState.Success -> SuccessUiState(
             galleryTags = (uiState as DefaultGalleryTagsUiState.Success).tags,
+            onItemClick = onItemClick
         )
 
         is DefaultGalleryTagsUiState.Error -> ErrorUiState(message = (uiState as DefaultGalleryTagsUiState.Error).message)
@@ -50,13 +54,16 @@ private fun LoadingUiState() {
 }
 
 @Composable
-private fun SuccessUiState(galleryTags: GalleryTags) {
+private fun SuccessUiState(
+    galleryTags: GalleryTags,
+    onItemClick: (String) -> Unit
+) {
     val tagModifier = Modifier.padding(4.dp)
     Column {
         TagsTitle()
         LazyRow { items(galleryTags.tags) { tag -> TagItem(modifier = tagModifier, tag = tag) } }
         Spacer(modifier = Modifier.height(12.dp))
-        LazyRow { items(galleryTags.topics) { topic -> TopicItem(topic) } }
+        LazyRow { items(galleryTags.topics) { topic -> TopicItem(topic, onItemClick) } }
     }
 }
 
@@ -84,7 +91,11 @@ private fun TagItem(tag: Tag, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun TopicItem(topic: Topic, modifier: Modifier = Modifier) {
+private fun TopicItem(
+    topic: Topic,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         Text(
             text = topic.name,
@@ -104,8 +115,10 @@ private fun TopicItem(topic: Topic, modifier: Modifier = Modifier) {
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleMedium
         )
-        GalleryItemContent(
-            topic.topPost, modifier = Modifier
+        GalleryItemThumbnail(
+            topic.topPost,
+            onItemClick = onItemClick,
+            modifier = Modifier
                 .padding(4.dp)
                 .width(300.dp)
         )

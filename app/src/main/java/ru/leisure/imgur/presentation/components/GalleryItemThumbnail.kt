@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,17 +36,34 @@ import ru.leisure.imgur.domain.models.GalleryImage
 import ru.leisure.imgur.domain.models.GalleryItem
 
 @Composable
-fun GalleryItemContent(galleryItem: GalleryItem, modifier: Modifier = Modifier) {
+fun GalleryItemThumbnail(
+    galleryItem: GalleryItem,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     when (galleryItem) {
-        is GalleryAlbum -> GalleryAlbumItem(galleryAlbum = galleryItem, modifier = modifier)
-        is GalleryImage -> GalleryImageItem(galleryImage = galleryItem, modifier = modifier)
+        is GalleryAlbum -> GalleryAlbumThumbnail(
+            galleryAlbum = galleryItem,
+            onItemClick = onItemClick,
+            modifier = modifier
+        )
+
+        is GalleryImage -> GalleryImageThumbnail(
+            galleryImage = galleryItem,
+            onItemClick = onItemClick,
+            modifier = modifier
+        )
     }
 }
 
 @Composable
-private fun GalleryAlbumItem(galleryAlbum: GalleryAlbum, modifier: Modifier = Modifier) {
+private fun GalleryAlbumThumbnail(
+    galleryAlbum: GalleryAlbum,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val image = galleryAlbum.images.firstOrNull()
-    GalleryItem(
+    Thumbnail(
         imageLink = image?.link,
         mp4 = image?.mp4,
         title = galleryAlbum.title,
@@ -53,13 +71,18 @@ private fun GalleryAlbumItem(galleryAlbum: GalleryAlbum, modifier: Modifier = Mo
         score = galleryAlbum.score,
         commentCount = galleryAlbum.commentCount,
         imagesCount = galleryAlbum.imagesCount,
+        onClick = { onItemClick.invoke(galleryAlbum.id) },
         modifier = modifier
     )
 }
 
 @Composable
-private fun GalleryImageItem(galleryImage: GalleryImage, modifier: Modifier = Modifier) {
-    GalleryItem(
+private fun GalleryImageThumbnail(
+    galleryImage: GalleryImage,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Thumbnail(
         imageLink = galleryImage.link,
         mp4 = galleryImage.mp4,
         title = galleryImage.title,
@@ -67,12 +90,14 @@ private fun GalleryImageItem(galleryImage: GalleryImage, modifier: Modifier = Mo
         score = galleryImage.score,
         commentCount = galleryImage.commentCount,
         imagesCount = 1,
+        onClick = { onItemClick.invoke(galleryImage.id) },
         modifier = modifier
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GalleryItem(
+private fun Thumbnail(
     imageLink: String?,
     mp4: String?,
     title: String,
@@ -80,10 +105,13 @@ private fun GalleryItem(
     score: Int,
     commentCount: Int,
     imagesCount: Int,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier, colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+        onClick = onClick,
+        modifier = modifier
     ) {
         Row {
             if (imageLink != null) {

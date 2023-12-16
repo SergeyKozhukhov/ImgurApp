@@ -24,11 +24,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.leisure.imgur.domain.models.GalleryItem
 import ru.leisure.imgur.presentation.components.ErrorMessage
-import ru.leisure.imgur.presentation.components.GalleryItemContent
+import ru.leisure.imgur.presentation.components.GalleryItemThumbnail
 import ru.leisure.imgur.presentation.components.ProgressBar
 
 @Composable
-fun GalleryScreen(viewModel: GalleryViewModel = viewModel(factory = GalleryViewModel.Factory)) {
+fun GalleryListScreen(
+    viewModel: GalleryViewModel = viewModel(factory = GalleryViewModel.Factory),
+    onItemClick: (String) -> Unit
+) {
     LaunchedEffect(true) {
         viewModel.loadGallery()
     }
@@ -38,6 +41,7 @@ fun GalleryScreen(viewModel: GalleryViewModel = viewModel(factory = GalleryViewM
         GalleryUiState.Idle, GalleryUiState.Loading -> LoadingUiState()
         is GalleryUiState.Success -> SuccessUiState(
             gallery = (uiState as GalleryUiState.Success).gallery,
+            onItemClick = onItemClick,
             onSearchClick = { viewModel.searchGallery(it) })
 
         is GalleryUiState.Error -> ErrorUiState(message = (uiState as GalleryUiState.Error).message)
@@ -51,15 +55,20 @@ private fun LoadingUiState() {
 }
 
 @Composable
-private fun SuccessUiState(gallery: List<GalleryItem>, onSearchClick: (String) -> Unit) {
+private fun SuccessUiState(
+    gallery: List<GalleryItem>,
+    onSearchClick: (String) -> Unit,
+    onItemClick: (String) -> Unit
+) {
     Column {
         SearchBar(onSearchClick = onSearchClick)
         LazyColumn {
             items(gallery) { galleryItem ->
-                GalleryItemContent(
+                GalleryItemThumbnail(
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth(),
+                    onItemClick = onItemClick,
                     galleryItem = galleryItem,
                 )
             }
