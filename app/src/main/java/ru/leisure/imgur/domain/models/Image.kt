@@ -5,9 +5,11 @@ data class Image(
     val title: String,
     val description: String?,
     val type: String,
+    val isAnimated: Boolean,
     val name: String?,
     val section: String?,
     val link: String,
     val gifv: String?,
     val mp4: String?,
+    val hasSound: Boolean
 )

@@ -11,11 +11,13 @@ class ImageConverter {
             title = source.title.orEmpty(),
             description = source.description,
             type = source.type,
+            isAnimated = source.isAnimated,
             name = source.name,
             section = source.section,
             link = source.link,
             gifv = source.gifv,
-            mp4 = source.mp4
+            mp4 = source.mp4,
+            hasSound = source.hasSound
         )
 
     fun convert(sourceList: List<ImageEntity>) = sourceList.map { convert(it) }
