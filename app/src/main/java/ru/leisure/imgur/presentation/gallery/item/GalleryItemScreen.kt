@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,8 +21,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
 import ru.leisure.imgur.domain.models.GalleryAlbum
-import ru.leisure.imgur.domain.models.GalleryImage
 import ru.leisure.imgur.domain.models.GalleryItem
+import ru.leisure.imgur.domain.models.GalleryMedia
+import ru.leisure.imgur.domain.models.Media
 import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.ProgressBar
 import ru.leisure.imgur.presentation.components.video.VideoPlayer
@@ -76,60 +78,69 @@ private fun GalleryItemContent(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (item) {
         is GalleryAlbum -> GalleryAlbumContent(item, uiState, modifier)
-        is GalleryImage -> GalleryImageContent(item, uiState, modifier)
+        is GalleryMedia -> GalleryMediaContent(item, uiState, modifier)
     }
 }
 
 @Composable
 private fun GalleryAlbumContent(
-    album: GalleryAlbum,
+    galleryAlbum: GalleryAlbum,
     uiState: GalleryItemUiState,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        items(album.images) { image ->
-            val mp4 = image.mp4
-            if (mp4 != null) {
-                VideoPlayer(
-                    url = mp4,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(400.dp)
-                )
-            } else {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(image.link?.toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_background)
-                        .build(),
-                    contentDescription = null,
-                    modifier = modifier
-                )
-            }
+        items(galleryAlbum.mediaList) { media ->
+            MediaContent(media)
         }
         commentItems(uiState = uiState)
     }
 }
 
 @Composable
-private fun GalleryImageContent(
-    image: GalleryImage,
+private fun GalleryMediaContent(
+    galleryMedia: GalleryMedia,
     uiState: GalleryItemUiState,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         item {
+            MediaContent(galleryMedia.media)
+        }
+        commentItems(uiState)
+    }
+}
+
+@Composable
+fun MediaContent(media: Media, modifier: Modifier = Modifier) {
+    when (media) {
+        is Media.Image -> {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(image.link?.toString())
+                    .data(media.link.toString())
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .error(R.drawable.ic_launcher_background)
                     .build(),
                 contentDescription = null,
+                modifier = modifier
             )
         }
-        commentItems(uiState)
+
+        is Media.Video -> {
+            VideoPlayer(
+                url = media.link,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+            )
+        }
+
+        is Media.Animation -> {
+            Text("Animation", modifier = modifier)
+        }
+
+        is Media.Unknown -> {
+            Text("Unknown", modifier = modifier)
+        }
     }
 }
 

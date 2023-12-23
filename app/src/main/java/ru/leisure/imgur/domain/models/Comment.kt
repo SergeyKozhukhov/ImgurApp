@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Comment(
     val id: Long,
-    val imageId: String,
+    val mediaId: String,
     val comment: String,
     val author: String,
     val onAlbum: Boolean,
-    val albumCover: String,
+    val albumCover: String?,
     val datetime: Long,
     val parentId: Long,
     val children: List<Comment>,

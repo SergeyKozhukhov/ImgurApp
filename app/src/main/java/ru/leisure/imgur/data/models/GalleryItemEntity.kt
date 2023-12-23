@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
         name = "true"
     ),
     JsonSubTypes.Type(
-        value = GalleryImageEntity::class,
+        value = GalleryMediaEntity::class,
         name = "false"
     )
 )

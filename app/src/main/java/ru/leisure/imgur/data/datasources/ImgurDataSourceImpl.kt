@@ -13,7 +13,7 @@ import ru.leisure.imgur.data.models.BasicEntity
 import ru.leisure.imgur.data.models.CommentEntity
 import ru.leisure.imgur.data.models.GalleryItemEntity
 import ru.leisure.imgur.data.models.GalleryTagsEntity
-import ru.leisure.imgur.data.models.ImageEntity
+import ru.leisure.imgur.data.models.MediaEntity
 import ru.leisure.imgur.data.models.ImgurResponseException
 import java.io.IOException
 
@@ -27,7 +27,7 @@ class ImgurDataSourceImpl(
     private val tagsRequest = buildRequest(url = DEFAULT_GALLERY_TAGS_URL.toHttpUrl())
 
     private val defaultMemesTypeReference =
-        object : TypeReference<BasicEntity<List<ImageEntity>>>() {}
+        object : TypeReference<BasicEntity<List<MediaEntity>>>() {}
     private val galleryTypeReference =
         object : TypeReference<BasicEntity<List<GalleryItemEntity>>>() {}
     private val defaultGalleryTagsTypeReference =

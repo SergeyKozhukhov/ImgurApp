@@ -4,7 +4,7 @@ import ru.leisure.imgur.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.domain.models.GalleryAlbum
 
 class GalleryAlbumConverter(
-    private val imageConverter: ImageConverter = ImageConverter(),
+    private val mediaConverter: MediaConverter = MediaConverter(),
     private val uriConverter: UriConverter = UriConverter()
 ) {
 
@@ -15,8 +15,8 @@ class GalleryAlbumConverter(
             link = uriConverter.convert(source.link),
             score = source.score,
             commentCount = source.commentCount,
-            imagesCount = source.imagesCount,
-            images = imageConverter.convert(source.images)
+            mediaCount = source.mediaCount,
+            mediaList = mediaConverter.convert(source.mediaList)
         )
 
     fun convert(sourceList: List<GalleryAlbumEntity>) = sourceList.map { convert(it) }

@@ -10,6 +10,6 @@ data class GalleryAlbumEntity(
     @JsonProperty("link") val link: String,
     @JsonProperty("score") val score: Int,
     @JsonProperty("comment_count") val commentCount: Int,
-    @JsonProperty("images_count") val imagesCount: Int,
-    @JsonProperty("images") val images: List<ImageEntity>,
+    @JsonProperty("images_count") val mediaCount: Int,
+    @JsonProperty("images") val mediaList: List<MediaEntity>,
 ) : GalleryItemEntity

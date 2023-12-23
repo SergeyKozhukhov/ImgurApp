@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ImageEntity(
+data class MediaEntity(
     @JsonProperty("id") val id: String,
     @JsonProperty("title") val title: String?,
     @JsonProperty("description") val description: String?,

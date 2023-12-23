@@ -32,9 +32,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
 import ru.leisure.imgur.domain.models.GalleryAlbum
-import ru.leisure.imgur.domain.models.GalleryImage
 import ru.leisure.imgur.domain.models.GalleryItem
-import java.net.URI
+import ru.leisure.imgur.domain.models.GalleryMedia
+import ru.leisure.imgur.domain.models.Media
 
 @Composable
 fun GalleryItemThumbnail(
@@ -49,8 +49,8 @@ fun GalleryItemThumbnail(
             modifier = modifier
         )
 
-        is GalleryImage -> GalleryImageThumbnail(
-            galleryImage = galleryItem,
+        is GalleryMedia -> GalleryMediaThumbnail(
+            galleryMedia = galleryItem,
             onItemClick = onItemClick,
             modifier = modifier
         )
@@ -63,51 +63,48 @@ private fun GalleryAlbumThumbnail(
     onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val image = galleryAlbum.images.firstOrNull()
-    Thumbnail(
-        imageLink = image?.link,
-        mp4 = image?.mp4,
+    val media = galleryAlbum.mediaList.first()
+    ThumbnailCard(
+        media = media,
         title = galleryAlbum.title,
         isAlbum = true,
         score = galleryAlbum.score,
         commentCount = galleryAlbum.commentCount,
-        imagesCount = galleryAlbum.imagesCount,
+        mediaCount = galleryAlbum.mediaCount,
         onClick = { onItemClick.invoke(galleryAlbum.id) },
         modifier = modifier
     )
 }
 
 @Composable
-private fun GalleryImageThumbnail(
-    galleryImage: GalleryImage,
+private fun GalleryMediaThumbnail(
+    galleryMedia: GalleryMedia,
     onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Thumbnail(
-        imageLink = galleryImage.link,
-        mp4 = galleryImage.mp4,
-        title = galleryImage.title,
+    ThumbnailCard(
+        media = galleryMedia.media,
+        title = galleryMedia.media.title,
         isAlbum = false,
-        score = galleryImage.score,
-        commentCount = galleryImage.commentCount,
-        imagesCount = 1,
-        onClick = { onItemClick.invoke(galleryImage.id) },
+        score = galleryMedia.score,
+        commentCount = galleryMedia.commentCount,
+        mediaCount = 1,
+        onClick = { onItemClick.invoke(galleryMedia.id) },
         modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Thumbnail(
-    imageLink: URI?,
-    mp4: URI?,
+private fun ThumbnailCard(
+    media: Media,
     title: String,
     isAlbum: Boolean,
     score: Int,
     commentCount: Int,
-    imagesCount: Int,
+    mediaCount: Int,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
@@ -115,22 +112,40 @@ private fun Thumbnail(
         modifier = modifier
     ) {
         Row {
-            if (imageLink != null) {
-                Box {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(imageLink.toString())
-                            .placeholder(R.drawable.ic_launcher_foreground)
-                            .error(R.drawable.ic_launcher_background)
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .size(86.dp)
-                            .clip(RoundedCornerShape(corner = CornerSize(12.dp))),
-                    )
-                    if (mp4 != null) {
+            Box {
+                when (media) {
+                    is Media.Image -> {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(media.link.toString())
+                                .placeholder(R.drawable.ic_launcher_foreground)
+                                .error(R.drawable.ic_launcher_background)
+                                .build(),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .size(86.dp)
+                                .clip(RoundedCornerShape(corner = CornerSize(12.dp))),
+                        )
+                    }
+
+                    is Media.Animation -> {
+                        Text(
+                            text = "Animation",
+                            modifier = Modifier
+                                .background(Color.Green)
+                                .padding(4.dp)
+                        )
+                    }
+
+                    is Media.Video -> {
+                        Text(
+                            text = "Video",
+                            modifier = Modifier
+                                .background(Color.Yellow)
+                                .padding(4.dp)
+                        )
                         Icon(
                             modifier = Modifier
                                 .padding(4.dp)
@@ -140,17 +155,26 @@ private fun Thumbnail(
                             tint = Color.White
                         )
                     }
-                    Text(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .align(Alignment.TopStart)
-                            .background(color = Color.LightGray, shape = CircleShape)
-                            .padding(2.dp),
-                        text = imagesCount.toString(),
-                        color = Color.White,
-                        style = MaterialTheme.typography.labelSmall
-                    )
+
+                    is Media.Unknown -> {
+                        Text(
+                            text = "Unknown",
+                            modifier = Modifier
+                                .background(Color.Red)
+                                .padding(4.dp)
+                        )
+                    }
                 }
+                Text(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.TopStart)
+                        .background(color = Color.LightGray, shape = CircleShape)
+                        .padding(2.dp),
+                    text = mediaCount.toString(),
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 SmallText(text = title)

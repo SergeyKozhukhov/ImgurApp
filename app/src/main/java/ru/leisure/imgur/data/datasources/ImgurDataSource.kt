@@ -7,7 +7,7 @@ import ru.leisure.imgur.data.models.BasicEntity
 import ru.leisure.imgur.data.models.CommentEntity
 import ru.leisure.imgur.data.models.GalleryItemEntity
 import ru.leisure.imgur.data.models.GalleryTagsEntity
-import ru.leisure.imgur.data.models.ImageEntity
+import ru.leisure.imgur.data.models.MediaEntity
 import ru.leisure.imgur.data.models.ImgurResponseException
 import java.io.IOException
 
@@ -20,7 +20,7 @@ interface ImgurDataSource {
         JsonMappingException::class,
         ImgurResponseException::class
     )
-    fun getDefaultMemes(): BasicEntity<List<ImageEntity>>
+    fun getDefaultMemes(): BasicEntity<List<MediaEntity>>
 
     @WorkerThread
     @Throws(

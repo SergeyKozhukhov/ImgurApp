@@ -8,6 +8,6 @@ data class GalleryAlbum(
     val link: URI?,
     val score: Int,
     val commentCount: Int,
-    val imagesCount: Int,
-    val images: List<Image>
+    val mediaCount: Int,
+    val mediaList: List<Media>
 ) : GalleryItem()

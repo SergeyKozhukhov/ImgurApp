@@ -8,7 +8,7 @@ class CommentConverter {
     fun convert(source: CommentEntity) =
         Comment(
             id = source.id,
-            imageId = source.imageId,
+            mediaId = source.mediaId,
             comment = source.comment,
             author = source.author,
             onAlbum = source.onAlbum,

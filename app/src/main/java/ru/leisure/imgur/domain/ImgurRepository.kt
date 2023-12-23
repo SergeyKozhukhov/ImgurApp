@@ -5,12 +5,12 @@ import ru.leisure.imgur.domain.models.Comment
 import ru.leisure.imgur.domain.models.DataLoadingException
 import ru.leisure.imgur.domain.models.GalleryItem
 import ru.leisure.imgur.domain.models.GalleryTags
-import ru.leisure.imgur.domain.models.Image
+import ru.leisure.imgur.domain.models.Media
 
 interface ImgurRepository {
 
     @Throws(DataLoadingException::class, CancellationException::class)
-    suspend fun getDefaultMemes(): List<Image>
+    suspend fun getDefaultMemes(): List<Media>
 
     @Throws(DataLoadingException::class, CancellationException::class)
     suspend fun getGallery(): List<GalleryItem>
