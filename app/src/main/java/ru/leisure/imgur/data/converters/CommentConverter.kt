@@ -15,8 +15,8 @@ class CommentConverter {
             albumCover = source.albumCover,
             datetime = source.datetime,
             parentId = source.parentId,
-            children = emptyList(),
+            children = convert(source.children)
         )
 
-    fun convert(sourceList: List<CommentEntity>) = sourceList.map { convert(it) }
+    fun convert(sourceList: List<CommentEntity>): List<Comment> = sourceList.map { convert(it) }
 }

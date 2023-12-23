@@ -34,6 +34,7 @@ import ru.leisure.imgur.R
 import ru.leisure.imgur.domain.models.GalleryAlbum
 import ru.leisure.imgur.domain.models.GalleryImage
 import ru.leisure.imgur.domain.models.GalleryItem
+import java.net.URI
 
 @Composable
 fun GalleryItemThumbnail(
@@ -98,8 +99,8 @@ private fun GalleryImageThumbnail(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Thumbnail(
-    imageLink: String?,
-    mp4: String?,
+    imageLink: URI?,
+    mp4: URI?,
     title: String,
     isAlbum: Boolean,
     score: Int,
@@ -118,7 +119,7 @@ private fun Thumbnail(
                 Box {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(imageLink)
+                            .data(imageLink.toString())
                             .placeholder(R.drawable.ic_launcher_foreground)
                             .error(R.drawable.ic_launcher_background)
                             .build(),

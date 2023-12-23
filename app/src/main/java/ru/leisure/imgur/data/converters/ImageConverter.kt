@@ -3,7 +3,9 @@ package ru.leisure.imgur.data.converters
 import ru.leisure.imgur.data.models.ImageEntity
 import ru.leisure.imgur.domain.models.Image
 
-class ImageConverter {
+class ImageConverter(
+    private val uriConverter: UriConverter = UriConverter()
+) {
 
     fun convert(source: ImageEntity) =
         Image(
@@ -14,9 +16,9 @@ class ImageConverter {
             isAnimated = source.isAnimated,
             name = source.name,
             section = source.section,
-            link = source.link,
-            gifv = source.gifv,
-            mp4 = source.mp4,
+            link = uriConverter.convert(source.link),
+            gifv = uriConverter.convert(source.gifv),
+            mp4 = uriConverter.convert(source.mp4),
             hasSound = source.hasSound
         )
 

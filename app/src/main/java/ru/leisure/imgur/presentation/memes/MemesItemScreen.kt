@@ -62,7 +62,7 @@ private fun MemeItem(
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(image.link)
+            .data(image.link?.toString())
             .placeholder(R.drawable.ic_launcher_foreground)
             .error(R.drawable.ic_launcher_background)
             .build(),

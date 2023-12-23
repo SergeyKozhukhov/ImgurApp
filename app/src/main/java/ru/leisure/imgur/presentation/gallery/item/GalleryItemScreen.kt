@@ -2,6 +2,8 @@ package ru.leisure.imgur.presentation.gallery.item
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -11,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -21,6 +24,7 @@ import ru.leisure.imgur.domain.models.GalleryImage
 import ru.leisure.imgur.domain.models.GalleryItem
 import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.ProgressBar
+import ru.leisure.imgur.presentation.components.video.VideoPlayer
 import ru.leisure.imgur.presentation.gallery.GalleryUiState
 import ru.leisure.imgur.presentation.gallery.GalleryViewModel
 
@@ -84,15 +88,25 @@ private fun GalleryAlbumContent(
 ) {
     LazyColumn(modifier = modifier) {
         items(album.images) { image ->
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(image.link)
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .error(R.drawable.ic_launcher_background)
-                    .build(),
-                contentDescription = null,
-                modifier = modifier
-            )
+            val mp4 = image.mp4
+            if (mp4 != null) {
+                VideoPlayer(
+                    url = mp4,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                )
+            } else {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(image.link?.toString())
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .error(R.drawable.ic_launcher_background)
+                        .build(),
+                    contentDescription = null,
+                    modifier = modifier
+                )
+            }
         }
         commentItems(uiState = uiState)
     }
@@ -108,7 +122,7 @@ private fun GalleryImageContent(
         item {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(image.link)
+                    .data(image.link?.toString())
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .error(R.drawable.ic_launcher_background)
                     .build(),

@@ -3,16 +3,18 @@ package ru.leisure.imgur.data.converters
 import ru.leisure.imgur.data.models.GalleryImageEntity
 import ru.leisure.imgur.domain.models.GalleryImage
 
-class GalleryImageConverter {
+class GalleryImageConverter(
+    private val uriConverter: UriConverter = UriConverter()
+) {
 
     fun convert(source: GalleryImageEntity) =
         GalleryImage(
             id = source.id,
             title = source.title,
             type = source.type,
-            link = source.link,
-            gifv = source.gifv,
-            mp4 = source.mp4,
+            link = uriConverter.convert(source.link),
+            gifv = uriConverter.convert(source.gifv),
+            mp4 = uriConverter.convert(source.mp4),
             commentCount = source.commentCount,
             score = source.score,
         )
