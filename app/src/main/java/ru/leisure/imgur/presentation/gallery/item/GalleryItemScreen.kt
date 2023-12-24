@@ -1,6 +1,8 @@
 package ru.leisure.imgur.presentation.gallery.item
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +19,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
 import ru.leisure.imgur.domain.models.GalleryAlbum
@@ -135,6 +141,18 @@ fun MediaContent(media: Media, modifier: Modifier = Modifier) {
         }
 
         is Media.Animation -> {
+            val imageLoader = ImageLoader.Builder(LocalContext.current)
+                .components { add(if (SDK_INT >= 28) ImageDecoderDecoder.Factory() else GifDecoder.Factory()) }
+                .build()
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(media.link.toString())
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .error(R.drawable.ic_launcher_background)
+                        .build(), imageLoader
+                ), contentDescription = null, modifier = modifier
+            )
             Text("Animation", modifier = modifier)
         }
 
