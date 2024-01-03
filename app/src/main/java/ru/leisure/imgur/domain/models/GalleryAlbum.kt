@@ -1,12 +1,13 @@
 package ru.leisure.imgur.domain.models
 
+import java.net.URI
+
 data class GalleryAlbum(
-    val id: String,
+    override val id: String,
     val title: String,
-    val link: String,
+    val link: URI?,
     val score: Int,
-    val isAlbum: Boolean,
     val commentCount: Int,
-    val imagesCount: Int,
-    val images: List<Image>
-)
+    val mediaCount: Int,
+    val mediaList: List<Media>
+) : GalleryItem()

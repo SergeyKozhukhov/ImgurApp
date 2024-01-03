@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
-import ru.leisure.imgur.domain.models.Image
+import ru.leisure.imgur.domain.models.Media
 import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.ProgressBar
 
@@ -39,7 +39,7 @@ fun MemesListScreen(
     viewModel: MemesViewModel = viewModel(factory = MemesViewModel.Factory),
     onItemClick: (String) -> Unit
 ) {
-    LaunchedEffect(true) { viewModel.loadMemes() }
+    LaunchedEffect(Unit) { viewModel.loadMemes() }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (uiState) {
@@ -61,13 +61,13 @@ private fun LoadingUiState() {
 
 @Composable
 private fun SuccessUiState(
-    memes: List<Image>,
+    memes: List<Media>,
     onItemClick: (String) -> Unit
 ) {
     LazyColumn {
         items(memes) { image ->
             MemeItem(
-                image = image,
+                media = image,
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth(),
@@ -79,30 +79,43 @@ private fun SuccessUiState(
 
 @Composable
 private fun MemeItem(
-    image: Image, modifier: Modifier = Modifier, onItemClick: (String) -> Unit
+    media: Media, modifier: Modifier = Modifier, onItemClick: (String) -> Unit
 ) {
     Card(
-        modifier = modifier.clickable { onItemClick.invoke(image.id) },
+        modifier = modifier.clickable { onItemClick.invoke(media.id) },
         colors = CardDefaults.cardColors(containerColor = Color.LightGray),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(image.link)
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .error(R.drawable.ic_launcher_background)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(4.dp)
-                    .size(86.dp)
-                    .clip(CircleShape),
-            )
+            when(media) {
+                is Media.Image -> {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(media.link.toString())
+                            .placeholder(R.drawable.ic_launcher_foreground)
+                            .error(R.drawable.ic_launcher_background)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .size(86.dp)
+                            .clip(CircleShape),
+                    )
+                }
+                is Media.Video -> {
+                    Text(text = "Video")
+                }
+                is Media.Animation -> {
+                    Text(text = "Animation")
+                }
+                is Media.Unknown -> {
+                    Text(text = "Unknown")
+                }
+            }
             Text(
-                text = image.title,
+                text = media.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),

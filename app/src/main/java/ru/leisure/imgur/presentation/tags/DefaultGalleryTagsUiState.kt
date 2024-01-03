@@ -6,6 +6,8 @@ import ru.leisure.imgur.domain.models.GalleryTags
 @Immutable
 sealed interface DefaultGalleryTagsUiState {
 
+    object Idle : DefaultGalleryTagsUiState
+
     object Loading : DefaultGalleryTagsUiState
 
     data class Success(val tags: GalleryTags) : DefaultGalleryTagsUiState

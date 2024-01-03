@@ -2,16 +2,17 @@ package ru.leisure.imgur.presentation.memes
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import ru.leisure.imgur.presentation.main.MainScreenContent
 
 sealed class MemesScreenContent(val route: String) {
 
-    object List : MemesScreenContent(route = "list")
+    object List : MemesScreenContent(route = "${MainScreenContent.Memes.route}-list")
 
-    object Item : MemesScreenContent(route = "item") {
-        const val imageIdTypeArg = "image_id_type"
-        val routeWithArgs = "${route}/{${imageIdTypeArg}}"
+    object Item : MemesScreenContent(route = "${MainScreenContent.Memes.route}-item") {
+        const val idArg = "idArg"
+        val routeWithArgs = "${route}/{${idArg}}"
         val arguments = listOf(
-            navArgument(imageIdTypeArg) { type = NavType.StringType }
+            navArgument(idArg) { type = NavType.StringType }
         )
     }
 }

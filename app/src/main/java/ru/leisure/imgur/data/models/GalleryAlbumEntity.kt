@@ -5,12 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GalleryAlbumEntity(
-    @JsonProperty("id") val id: String,
+    @JsonProperty("id") override val id: String,
     @JsonProperty("title") val title: String,
     @JsonProperty("link") val link: String,
     @JsonProperty("score") val score: Int,
-    @JsonProperty("isAlbum") val isAlbum: Boolean,
     @JsonProperty("comment_count") val commentCount: Int,
-    @JsonProperty("images_count") val imagesCount: Int,
-    @JsonProperty("images") val images: List<ImageEntity>?,
-)
+    @JsonProperty("images_count") val mediaCount: Int,
+    @JsonProperty("images") val mediaList: List<MediaEntity>,
+) : GalleryItemEntity

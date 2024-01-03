@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -13,7 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.R
-import ru.leisure.imgur.domain.models.Image
+import ru.leisure.imgur.domain.models.Media
 import ru.leisure.imgur.presentation.components.ErrorMessage
 import ru.leisure.imgur.presentation.components.ProgressBar
 
@@ -43,13 +44,13 @@ private fun LoadingUiState() {
 @Composable
 private fun SuccessUiState(
     imageId: String,
-    memes: List<Image>,
+    memes: List<Media>,
 ) {
-    memes.indexOfFirst { it.id == imageId }.takeIf { it > 0 }?.let { initIndex ->
+    memes.indexOfFirst { it.id == imageId }.takeIf { it >= 0 }?.let { initIndex ->
         val pagerState = rememberPagerState(initialPage = initIndex, pageCount = { memes.size })
         HorizontalPager(state = pagerState) { index ->
             MemeItem(
-                image = memes[index],
+                media = memes[index],
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -58,17 +59,33 @@ private fun SuccessUiState(
 
 @Composable
 private fun MemeItem(
-    image: Image, modifier: Modifier = Modifier
+    media: Media, modifier: Modifier = Modifier
 ) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(image.link)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .error(R.drawable.ic_launcher_background)
-            .build(),
-        contentDescription = null,
-        modifier = modifier
-    )
+    when (media) {
+        is Media.Image -> {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(media.link.toString())
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
+                    .build(),
+                contentDescription = null,
+                modifier = modifier
+            )
+        }
+
+        is Media.Animation -> {
+            Text("Animation")
+        }
+
+        is Media.Video -> {
+            Text("Video")
+        }
+
+        is Media.Unknown -> {
+            Text("Unknown")
+        }
+    }
 }
 
 @Composable

@@ -17,19 +17,19 @@ fun NavGraphBuilder.memesGraph(navController: NavController) {
         composable(route = MemesScreenContent.List.route) { backStackEntry ->
             MemesListScreen(
                 viewModel = memesViewModel(navController, backStackEntry),
-                onItemClick = { imageId ->
-                    navController.navigate("${MemesScreenContent.Item.route}/$imageId")
+                onItemClick = { id ->
+                    navController.navigate("${MemesScreenContent.Item.route}/$id")
                 })
         }
         composable(
             route = MemesScreenContent.Item.routeWithArgs,
             arguments = MemesScreenContent.Item.arguments,
         ) { backStackEntry ->
-            backStackEntry.arguments?.getString(MemesScreenContent.Item.imageIdTypeArg)
-                ?.let { imageId ->
+            backStackEntry.arguments?.getString(MemesScreenContent.Item.idArg)
+                ?.let { id ->
                     MemesItemScreen(
                         viewModel = memesViewModel(navController, backStackEntry),
-                        imageId = imageId
+                        imageId = id
                     )
                 }
         }
