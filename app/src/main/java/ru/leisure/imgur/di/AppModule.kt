@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import ru.leisure.imgur.core.base.api.coroutine.Dispatcher
 import ru.leisure.imgur.data.ImgurRepositoryImpl
 import ru.leisure.imgur.data.datasources.ImgurDataSource
 import ru.leisure.imgur.data.datasources.ImgurDataSourceImpl
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit
 object AppModule {
 
     @Provides
-    fun provideImgurInteractor(): ImgurInteractor {
+    fun provideImgurInteractor(dispatcher: Dispatcher): ImgurInteractor {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(3000, TimeUnit.MILLISECONDS)
             .writeTimeout(3000, TimeUnit.MILLISECONDS)
@@ -27,7 +28,10 @@ object AppModule {
             objectMapper = ObjectMapper()
         )
 
-        val repository: ImgurRepository = ImgurRepositoryImpl(dataSource = imgurDataSource)
+        val repository: ImgurRepository = ImgurRepositoryImpl(
+            dataSource = imgurDataSource,
+            dispatcher = dispatcher
+        )
 
         return ImgurInteractorImpl(repository = repository)
     }

@@ -2,6 +2,7 @@ package ru.leisure.imgur
 
 import android.app.Application
 import android.content.Context
+import ru.leisure.imgur.core.base.factory.CoreProvidersFactory
 import ru.leisure.imgur.di.AppComponent
 import ru.leisure.imgur.di.DaggerAppComponent
 
@@ -11,7 +12,9 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder()
+            .coroutineProvider(CoreProvidersFactory.createCoroutineProvider())
+            .build()
     }
 
     companion object {

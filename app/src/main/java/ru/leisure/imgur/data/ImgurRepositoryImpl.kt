@@ -1,8 +1,8 @@
 package ru.leisure.imgur.data
 
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.leisure.imgur.core.base.api.coroutine.Dispatcher
 import ru.leisure.imgur.data.converters.CommentConverter
 import ru.leisure.imgur.data.converters.GalleryItemConverter
 import ru.leisure.imgur.data.converters.GalleryTagsConverter
@@ -14,13 +14,14 @@ import ru.leisure.imgur.domain.models.DataLoadingException
 
 class ImgurRepositoryImpl(
     private val dataSource: ImgurDataSource,
+    private val dispatcher: Dispatcher,
     private val mediaConverter: MediaConverter = MediaConverter(),
     private val galleryItemConverter: GalleryItemConverter = GalleryItemConverter(),
     private val galleryTagsConverter: GalleryTagsConverter = GalleryTagsConverter(),
     private val commentConverter: CommentConverter = CommentConverter()
 ) : ImgurRepository {
 
-    override suspend fun getDefaultMemes() = withContext(Dispatchers.IO) {
+    override suspend fun getDefaultMemes() = withContext(dispatcher.io) {
         try {
             val defaultMemes = dataSource.getDefaultMemes()
             mediaConverter.convert(defaultMemes.data)
@@ -31,7 +32,7 @@ class ImgurRepositoryImpl(
         }
     }
 
-    override suspend fun getGallery() = withContext(Dispatchers.IO) {
+    override suspend fun getGallery() = withContext(dispatcher.io) {
         try {
             val gallery = dataSource.getGallery()
             galleryItemConverter.convert(gallery.data)
@@ -42,7 +43,7 @@ class ImgurRepositoryImpl(
         }
     }
 
-    override suspend fun getDefaultGalleryTags() = withContext(Dispatchers.IO) {
+    override suspend fun getDefaultGalleryTags() = withContext(dispatcher.io) {
         try {
             val tags = dataSource.getDefaultGalleryTags()
             galleryTagsConverter.convert(tags.data)
@@ -53,7 +54,7 @@ class ImgurRepositoryImpl(
         }
     }
 
-    override suspend fun searchGallery(query: String) = withContext(Dispatchers.IO) {
+    override suspend fun searchGallery(query: String) = withContext(dispatcher.io) {
         try {
             val gallery = dataSource.searchGallery(query)
             galleryItemConverter.convert(gallery.data)
@@ -64,7 +65,7 @@ class ImgurRepositoryImpl(
         }
     }
 
-    override suspend fun getComments(id: String): List<Comment> = withContext(Dispatchers.IO) {
+    override suspend fun getComments(id: String): List<Comment> = withContext(dispatcher.io) {
         try {
             val comments = dataSource.getComments(id)
             commentConverter.convert(comments.data)
