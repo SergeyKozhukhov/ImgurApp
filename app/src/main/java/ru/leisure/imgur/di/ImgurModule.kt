@@ -14,7 +14,7 @@ import ru.leisure.imgur.domain.ImgurRepository
 import java.util.concurrent.TimeUnit
 
 @Module
-object AppModule {
+object ImgurModule {
 
     @Provides
     fun provideImgurInteractor(dispatcher: Dispatcher): ImgurInteractor {
