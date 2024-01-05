@@ -2,7 +2,7 @@ package ru.leisure.imgur.feature.base.data
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
-import ru.leisure.imgur.core.base.api.coroutine.Dispatcher
+import ru.leisure.imgur.core.coroutines.api.Dispatcher
 import ru.leisure.imgur.feature.base.data.converters.CommentConverter
 import ru.leisure.imgur.feature.base.data.converters.GalleryItemConverter
 import ru.leisure.imgur.feature.base.data.converters.GalleryTagsConverter

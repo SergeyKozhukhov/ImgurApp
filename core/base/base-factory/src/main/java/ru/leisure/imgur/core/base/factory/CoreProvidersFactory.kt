@@ -1,11 +1,17 @@
 package ru.leisure.imgur.core.base.factory
 
-import ru.leisure.imgur.core.base.api.coroutine.CoroutineProvider
-import ru.leisure.imgur.core.base.impl.coroutine.DaggerCoroutineComponent
+import ru.leisure.imgur.core.coroutines.api.CoroutinesProvider
+import ru.leisure.imgur.core.coroutines.impl.DaggerCoroutinesComponent
+import ru.leisure.imgur.core.network.api.NetworkProvider
+import ru.leisure.imgur.core.network.impl.DaggerNetworkComponent
 
 object CoreProvidersFactory {
 
-    fun createCoroutineProvider(): CoroutineProvider {
-        return DaggerCoroutineComponent.builder().build()
+    fun createCoroutinesProvider(): CoroutinesProvider {
+        return DaggerCoroutinesComponent.builder().build()
+    }
+
+    fun createNetworkProvider(): NetworkProvider {
+        return DaggerNetworkComponent.builder().build()
     }
 }
