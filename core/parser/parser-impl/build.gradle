@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
-    id 'com.google.devtools.ksp'
+    alias libs.plugins.kotlin.jvm
+    alias libs.plugins.ksp
 }
 
 java {
@@ -14,11 +14,11 @@ dependencies {
     api project(':core:parser:parser-api')
 
     /* Dagger2 */
-    implementation 'com.google.dagger:dagger:2.48'
-    ksp 'com.google.dagger:dagger-compiler:2.48'
+    implementation libs.dagger
+    ksp libs.dagger.compiler
 
     /* Jackson */
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation libs.jackson.core
+    implementation libs.jackson.annotations
+    implementation libs.jackson.databind
 }
