@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'com.google.devtools.ksp'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
+
+    api project(':core:parser:parser-api')
+
+    /* Dagger2 */
+    implementation 'com.google.dagger:dagger:2.48'
+    ksp 'com.google.dagger:dagger-compiler:2.48'
+
+    /* Jackson */
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+}

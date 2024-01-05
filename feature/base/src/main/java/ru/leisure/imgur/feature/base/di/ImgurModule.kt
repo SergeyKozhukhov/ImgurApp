@@ -18,12 +18,13 @@ object ImgurModule {
     @Provides
     fun provideImgurInteractor(
         okHttpClient: OkHttpClient,
+        objectMapper: ObjectMapper,
         dispatcher: Dispatcher
     ): ImgurInteractor {
 
         val imgurDataSource: ImgurDataSource = ImgurDataSourceImpl(
             okHttpClient = okHttpClient,
-            objectMapper = ObjectMapper()
+            objectMapper = objectMapper
         )
 
         val repository: ImgurRepository = ImgurRepositoryImpl(
