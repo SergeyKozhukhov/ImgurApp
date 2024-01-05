@@ -1,4 +1,4 @@
-package ru.leisure.imgur.feature.base.presentation.components.video
+package ru.leisure.imgur.common.video
 
 import androidx.annotation.OptIn
 import androidx.compose.runtime.Composable

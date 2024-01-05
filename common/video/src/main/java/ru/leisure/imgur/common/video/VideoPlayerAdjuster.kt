@@ -1,4 +1,4 @@
-package ru.leisure.imgur.feature.base.presentation.components.video
+package ru.leisure.imgur.common.video
 
 import android.content.Context
 import android.util.AttributeSet

@@ -25,6 +25,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
+import ru.leisure.imgur.common.video.VideoPlayer
 import ru.leisure.imgur.feature.base.R
 import ru.leisure.imgur.feature.base.domain.models.GalleryAlbum
 import ru.leisure.imgur.feature.base.domain.models.GalleryItem
@@ -32,7 +33,6 @@ import ru.leisure.imgur.feature.base.domain.models.GalleryMedia
 import ru.leisure.imgur.feature.base.domain.models.Media
 import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
 import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
-import ru.leisure.imgur.feature.base.presentation.components.video.VideoPlayer
 import ru.leisure.imgur.feature.base.presentation.gallery.GalleryUiState
 import ru.leisure.imgur.feature.base.presentation.gallery.GalleryViewModel
 
