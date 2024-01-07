@@ -6,7 +6,9 @@ class ImgurInteractorImpl(private val repository: ImgurRepository) : ImgurIntera
 
     override suspend fun getGallery(page: Int) = repository.getGallery(page)
 
-    override suspend fun getAlbum(id: String) = repository.getAlbum(id)
+    override suspend fun getGalleryAlbum(id: String) = repository.getGalleryAlbum(id)
+
+    override suspend fun getGalleryMedia(id: String) = repository.getGalleryMedia(id)
 
     override suspend fun getDefaultGalleryTags() = repository.getDefaultGalleryTags()
 

@@ -13,6 +13,7 @@ import ru.leisure.imgur.feature.base.data.models.BasicEntity
 import ru.leisure.imgur.feature.base.data.models.CommentEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryItemEntity
+import ru.leisure.imgur.feature.base.data.models.GalleryMediaEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryTagsEntity
 import ru.leisure.imgur.feature.base.data.models.MediaEntity
 
@@ -28,8 +29,10 @@ class ImgurDataSourceImpl(
         object : TypeReference<BasicEntity<List<MediaEntity>>>() {}
     private val galleryTypeReference =
         object : TypeReference<BasicEntity<List<GalleryItemEntity>>>() {}
-    private val albumTypeReference =
+    private val galleryAlbumTypeReference =
         object : TypeReference<BasicEntity<GalleryAlbumEntity>>() {}
+    private val galleryMediaTypeReference =
+        object : TypeReference<BasicEntity<GalleryMediaEntity>>() {}
     private val defaultGalleryTagsTypeReference =
         object : TypeReference<BasicEntity<GalleryTagsEntity>>() {}
     private val commentsTypeReference =
@@ -42,9 +45,14 @@ class ImgurDataSourceImpl(
         return makeRequest(request, galleryTypeReference)
     }
 
-    override fun getAlbum(id: String): BasicEntity<GalleryAlbumEntity> {
-        val request = buildRequest(formAlbumUrl(id))
-        return makeRequest(request, albumTypeReference)
+    override fun getGalleryAlbum(id: String): BasicEntity<GalleryAlbumEntity> {
+        val request = buildRequest(formGalleryAlbumUrl(id))
+        return makeRequest(request, galleryAlbumTypeReference)
+    }
+
+    override fun getGalleryMedia(id: String): BasicEntity<GalleryMediaEntity> {
+        val request = buildRequest(formGalleryMediaUrl(id))
+        return makeRequest(request, galleryMediaTypeReference)
     }
 
     override fun getDefaultGalleryTags() = makeRequest(tagsRequest, defaultGalleryTagsTypeReference)
@@ -82,7 +90,8 @@ class ImgurDataSourceImpl(
 
         const val DEFAULT_MEMES_URL = "$IMGUR/3/memegen/defaults"
         const val GALLERY_URL = "$GALLERY/hot"
-        const val ALBUM_URL = "$GALLERY/album"
+        const val GALLERY_ALBUM_URL = "$GALLERY/album"
+        const val GALLERY_MEDIA_URL = "$GALLERY/image"
         const val DEFAULT_GALLERY_TAGS_URL = "$IMGUR/3/tags"
         const val SEARCH_GALLERY_URL = "$GALLERY/search?q="
 
@@ -90,7 +99,9 @@ class ImgurDataSourceImpl(
 
         fun formSearchUrl(query: String) = "$SEARCH_GALLERY_URL$query".toHttpUrl()
 
-        fun formAlbumUrl(id: String) = "$ALBUM_URL/$id".toHttpUrl()
+        fun formGalleryAlbumUrl(id: String) = "$GALLERY_ALBUM_URL/$id".toHttpUrl()
+
+        fun formGalleryMediaUrl(id: String) = "$GALLERY_MEDIA_URL/$id".toHttpUrl()
 
         fun formCommentsUrl(id: String) = "$GALLERY/$id/$COMMENTS".toHttpUrl()
     }

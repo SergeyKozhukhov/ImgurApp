@@ -7,6 +7,7 @@ import ru.leisure.imgur.feature.base.data.models.BasicEntity
 import ru.leisure.imgur.feature.base.data.models.CommentEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryItemEntity
+import ru.leisure.imgur.feature.base.data.models.GalleryMediaEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryTagsEntity
 import ru.leisure.imgur.feature.base.data.models.MediaEntity
 
@@ -22,7 +23,11 @@ interface ImgurDataSource {
 
     @WorkerThread
     @Throws(NetworkException::class, ParserException::class)
-    fun getAlbum(id: String): BasicEntity<GalleryAlbumEntity>
+    fun getGalleryAlbum(id: String): BasicEntity<GalleryAlbumEntity>
+
+    @WorkerThread
+    @Throws(NetworkException::class, ParserException::class)
+    fun getGalleryMedia(id: String): BasicEntity<GalleryMediaEntity>
 
     @WorkerThread
     @Throws(NetworkException::class, ParserException::class)

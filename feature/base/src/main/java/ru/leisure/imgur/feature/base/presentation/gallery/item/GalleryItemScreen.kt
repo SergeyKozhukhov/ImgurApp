@@ -27,6 +27,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import ru.leisure.imgur.common.video.VideoPlayer
 import ru.leisure.imgur.feature.base.R
+import ru.leisure.imgur.feature.base.domain.models.Comment
 import ru.leisure.imgur.feature.base.domain.models.GalleryAlbum
 import ru.leisure.imgur.feature.base.domain.models.GalleryItem
 import ru.leisure.imgur.feature.base.domain.models.GalleryMedia
@@ -79,40 +80,50 @@ private fun GalleryItemContent(
     )
 ) {
     LaunchedEffect(Unit) {
-        viewModel.loadComments(item.id)
+        viewModel.loadItem(item)
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    when (item) {
-        is GalleryAlbum -> GalleryAlbumContent(item, uiState, modifier)
-        is GalleryMedia -> GalleryMediaContent(item, uiState, modifier)
+    when (val state = uiState) {
+        GalleryItemUiState.Idle, GalleryItemUiState.Loading -> LoadingUiState()
+        is GalleryItemUiState.Success -> SuccessItemUiState(uiState = state, modifier = modifier)
+        is GalleryItemUiState.Error -> ErrorUiState(message = state.message)
     }
 }
 
 @Composable
+private fun SuccessItemUiState(
+    uiState: GalleryItemUiState.Success, modifier: Modifier = Modifier
+) {
+    when (val item = uiState.galleryItem) {
+        is GalleryAlbum -> GalleryAlbumContent(item, uiState.comments, modifier)
+        is GalleryMedia -> GalleryMediaContent(item, uiState.comments, modifier)
+    }
+}
+
+
+@Composable
 private fun GalleryAlbumContent(
     galleryAlbum: GalleryAlbum,
-    uiState: GalleryItemUiState,
+    comments: List<Comment>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         items(galleryAlbum.mediaList) { media ->
             MediaContent(media)
         }
-        commentItems(uiState = uiState)
+        commentItems(comments)
     }
 }
 
 @Composable
 private fun GalleryMediaContent(
     galleryMedia: GalleryMedia,
-    uiState: GalleryItemUiState,
+    comments: List<Comment>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        item {
-            MediaContent(galleryMedia.media)
-        }
-        commentItems(uiState)
+        item { MediaContent(galleryMedia.media) }
+        commentItems(comments)
     }
 }
 
