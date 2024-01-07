@@ -10,6 +10,7 @@ sealed class Media {
     abstract val type: String
     abstract val width: Int
     abstract val height: Int
+    abstract val views: Int
     abstract val name: String?
     abstract val section: String?
 
@@ -20,9 +21,10 @@ sealed class Media {
         override val type: String,
         override val width: Int,
         override val height: Int,
+        override val views: Int,
         override val name: String?,
         override val section: String?,
-        val link: URI,
+        val link: URI
     ) : Media()
 
     data class Animation(
@@ -32,6 +34,7 @@ sealed class Media {
         override val type: String,
         override val width: Int,
         override val height: Int,
+        override val views: Int,
         override val name: String?,
         override val section: String?,
         val link: URI,
@@ -45,6 +48,7 @@ sealed class Media {
         override val type: String,
         override val width: Int,
         override val height: Int,
+        override val views: Int,
         override val name: String?,
         override val section: String?,
         val link: URI,
@@ -58,6 +62,7 @@ sealed class Media {
         override val type: String,
         override val width: Int,
         override val height: Int,
+        override val views: Int,
         override val name: String?,
         override val section: String?
     ) : Media()

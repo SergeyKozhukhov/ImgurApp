@@ -64,6 +64,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section,
             link = link,
@@ -79,6 +80,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section,
             link = link,
@@ -96,6 +98,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section,
             link = link,
@@ -112,6 +115,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section
         )
@@ -125,6 +129,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section,
             link = link,
@@ -140,6 +145,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section,
             link = link,
@@ -157,6 +163,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section,
             link = link,
@@ -173,6 +180,7 @@ class MediaConverter(
             type = source.type,
             width = source.width,
             height = source.height,
+            views = source.views,
             name = source.name,
             section = source.section
         )

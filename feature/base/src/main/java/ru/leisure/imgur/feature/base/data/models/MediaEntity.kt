@@ -12,6 +12,7 @@ data class MediaEntity(
     @JsonProperty("animated") val isAnimated: Boolean,
     @JsonProperty("width") val width: Int,
     @JsonProperty("height") val height: Int,
+    @JsonProperty("views") val views: Int,
     @JsonProperty("name") val name: String?,
     @JsonProperty("section") val section: String?,
     @JsonProperty("link") val link: String,

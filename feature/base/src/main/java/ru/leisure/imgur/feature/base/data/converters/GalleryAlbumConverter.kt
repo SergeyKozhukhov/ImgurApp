@@ -17,6 +17,7 @@ class GalleryAlbumConverter(
             coverId = source.cover,
             coverWidth = source.coverWidth,
             coverHeight = source.coverHeight,
+            views = source.views,
             link = uriConverter.convert(source.link),
             score = source.score,
             commentCount = source.commentCount,

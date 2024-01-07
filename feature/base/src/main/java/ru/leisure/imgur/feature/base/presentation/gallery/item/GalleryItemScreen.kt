@@ -3,9 +3,12 @@ package ru.leisure.imgur.feature.base.presentation.gallery.item
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -15,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,11 +47,17 @@ fun GalleryItemScreen(
     id: String,
     galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModel.Factory),
 ) {
-    val uiState by galleryViewModel.uiState.collectAsStateWithLifecycle()
-    when (uiState) {
-        GalleryUiState.Idle, GalleryUiState.Loading -> LoadingUiState()
-        is GalleryUiState.Success -> SuccessUiState(id, (uiState as GalleryUiState.Success).gallery)
-        is GalleryUiState.Error -> ErrorUiState(message = (uiState as GalleryUiState.Error).message)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Gray)
+    ) {
+        val uiState by galleryViewModel.uiState.collectAsStateWithLifecycle()
+        when (val state = uiState) {
+            GalleryUiState.Idle, GalleryUiState.Loading -> LoadingUiState()
+            is GalleryUiState.Success -> SuccessUiState(id = id, gallery = state.gallery)
+            is GalleryUiState.Error -> ErrorUiState(message = state.message)
+        }
     }
 }
 
@@ -109,8 +120,13 @@ private fun GalleryAlbumContent(
 ) {
     LazyColumn(modifier = modifier) {
         items(galleryAlbum.mediaList) { media ->
-            MediaContent(media)
+            MediaContent(
+                media = media, modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
         }
+        item { ViewStructure(galleryAlbum.views) }
         commentItems(comments)
     }
 }
@@ -122,7 +138,15 @@ private fun GalleryMediaContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        item { MediaContent(galleryMedia.media) }
+        item {
+            MediaContent(
+                galleryMedia.media,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
+        }
+        item { ViewStructure(galleryMedia.media.views) }
         commentItems(comments)
     }
 }
@@ -134,10 +158,11 @@ fun MediaContent(media: Media, modifier: Modifier = Modifier) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(media.link.toString())
-                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .placeholder(R.drawable.baseline_panorama_60)
                     .error(R.drawable.ic_launcher_background)
                     .build(),
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = modifier
             )
         }
@@ -145,9 +170,7 @@ fun MediaContent(media: Media, modifier: Modifier = Modifier) {
         is Media.Video -> {
             VideoPlayer(
                 url = media.link,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
+                modifier = modifier.height(400.dp)
             )
         }
 
@@ -159,10 +182,13 @@ fun MediaContent(media: Media, modifier: Modifier = Modifier) {
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(media.link.toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.baseline_panorama_60)
                         .error(R.drawable.ic_launcher_background)
                         .build(), imageLoader
-                ), contentDescription = null, modifier = modifier
+                ),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = modifier
             )
             Text("Animation", modifier = modifier)
         }
@@ -170,6 +196,13 @@ fun MediaContent(media: Media, modifier: Modifier = Modifier) {
         is Media.Unknown -> {
             Text("Unknown", modifier = modifier)
         }
+    }
+}
+
+@Composable
+private fun ViewStructure(views: Int) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Text(text = "$views views")
     }
 }
 

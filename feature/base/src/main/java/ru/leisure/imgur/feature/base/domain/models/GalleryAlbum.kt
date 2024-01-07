@@ -9,6 +9,7 @@ data class GalleryAlbum(
     val coverId: String,
     val coverWidth: Int,
     val coverHeight: Int,
+    val views: Int,
     val link: URI?,
     val score: Int,
     val commentCount: Int,
