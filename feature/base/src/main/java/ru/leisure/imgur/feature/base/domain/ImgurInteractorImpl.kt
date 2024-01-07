@@ -1,10 +1,12 @@
 package ru.leisure.imgur.feature.base.domain
 
+import ru.leisure.imgur.feature.base.domain.models.GalleryItem
+
 class ImgurInteractorImpl(private val repository: ImgurRepository) : ImgurInteractor {
 
     override suspend fun getDefaultMemes() = repository.getDefaultMemes()
 
-    override suspend fun getGallery() = repository.getGallery()
+    override suspend fun getGallery(page: Int): List<GalleryItem> = repository.getGallery(page)
 
     override suspend fun getDefaultGalleryTags() = repository.getDefaultGalleryTags()
 

@@ -11,6 +11,7 @@ import ru.leisure.imgur.feature.base.data.datasources.ImgurDataSource
 import ru.leisure.imgur.feature.base.domain.ImgurRepository
 import ru.leisure.imgur.feature.base.domain.models.Comment
 import ru.leisure.imgur.feature.base.domain.models.DataLoadingException
+import ru.leisure.imgur.feature.base.domain.models.GalleryItem
 
 class ImgurRepositoryImpl(
     private val dataSource: ImgurDataSource,
@@ -32,9 +33,9 @@ class ImgurRepositoryImpl(
         }
     }
 
-    override suspend fun getGallery() = withContext(dispatcher.io) {
+    override suspend fun getGallery(page: Int): List<GalleryItem> = withContext(dispatcher.io) {
         try {
-            val gallery = dataSource.getGallery()
+            val gallery = dataSource.getGallery(page)
             galleryItemConverter.convert(gallery.data)
         } catch (e: CancellationException) {
             throw e

@@ -13,7 +13,7 @@ interface ImgurRepository {
     suspend fun getDefaultMemes(): List<Media>
 
     @Throws(DataLoadingException::class, CancellationException::class)
-    suspend fun getGallery(): List<GalleryItem>
+    suspend fun getGallery(page: Int): List<GalleryItem>
 
     @Throws(DataLoadingException::class, CancellationException::class)
     suspend fun getDefaultGalleryTags(): GalleryTags

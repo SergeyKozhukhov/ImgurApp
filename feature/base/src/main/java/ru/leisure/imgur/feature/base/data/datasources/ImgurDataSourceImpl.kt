@@ -23,7 +23,6 @@ class ImgurDataSourceImpl(
 ) : ImgurDataSource {
 
     private val defaultMemesRequest = buildRequest(url = DEFAULT_MEMES_URL.toHttpUrl())
-    private val galleryRequest = buildRequest(url = GALLERY_URL.toHttpUrl())
     private val tagsRequest = buildRequest(url = DEFAULT_GALLERY_TAGS_URL.toHttpUrl())
 
     private val defaultMemesTypeReference =
@@ -37,17 +36,20 @@ class ImgurDataSourceImpl(
 
     override fun getDefaultMemes() = makeRequest(defaultMemesRequest, defaultMemesTypeReference)
 
-    override fun getGallery() = makeRequest(galleryRequest, galleryTypeReference)
+    override fun getGallery(page: Int): BasicEntity<List<GalleryItemEntity>> {
+        val request = buildRequest(formGalleryUrl(page))
+        return makeRequest(request, galleryTypeReference)
+    }
 
     override fun getDefaultGalleryTags() = makeRequest(tagsRequest, defaultGalleryTagsTypeReference)
 
     override fun searchGallery(query: String): BasicEntity<List<GalleryItemEntity>> {
-        val request = buildRequest("$SEARCH_GALLERY_URL$query".toHttpUrl())
+        val request = buildRequest(formSearchUrl(query))
         return makeRequest(request, galleryTypeReference)
     }
 
     override fun getComments(id: String): BasicEntity<List<CommentEntity>> {
-        val request = buildRequest(formCommentsUrl(id).toHttpUrl())
+        val request = buildRequest(formCommentsUrl(id))
         return makeRequest(request, commentsTypeReference)
     }
 
@@ -88,6 +90,10 @@ class ImgurDataSourceImpl(
         const val DEFAULT_GALLERY_TAGS_URL = "$IMGUR/3/tags"
         const val SEARCH_GALLERY_URL = "$GALLERY/search?q="
 
-        fun formCommentsUrl(id: String) = "$GALLERY/$id/$COMMENTS"
+        fun formCommentsUrl(id: String) = "$GALLERY/$id/$COMMENTS".toHttpUrl()
+
+        fun formGalleryUrl(page: Int) = "$GALLERY_URL/$page".toHttpUrl()
+
+        fun formSearchUrl(query: String) = "$SEARCH_GALLERY_URL$query".toHttpUrl()
     }
 }

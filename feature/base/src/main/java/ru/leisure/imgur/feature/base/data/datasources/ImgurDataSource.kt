@@ -29,7 +29,7 @@ interface ImgurDataSource {
         JsonMappingException::class,
         ImgurResponseException::class
     )
-    fun getGallery(): BasicEntity<List<GalleryItemEntity>>
+    fun getGallery(page: Int): BasicEntity<List<GalleryItemEntity>>
 
     @WorkerThread
     @Throws(
