@@ -4,6 +4,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import ru.leisure.imgur.core.coroutines.api.Dispatcher
 import ru.leisure.imgur.feature.base.data.converters.CommentConverter
+import ru.leisure.imgur.feature.base.data.converters.GalleryAlbumConverter
 import ru.leisure.imgur.feature.base.data.converters.GalleryItemConverter
 import ru.leisure.imgur.feature.base.data.converters.GalleryTagsConverter
 import ru.leisure.imgur.feature.base.data.converters.MediaConverter
@@ -11,6 +12,7 @@ import ru.leisure.imgur.feature.base.data.datasources.ImgurDataSource
 import ru.leisure.imgur.feature.base.domain.ImgurRepository
 import ru.leisure.imgur.feature.base.domain.models.Comment
 import ru.leisure.imgur.feature.base.domain.models.DataLoadingException
+import ru.leisure.imgur.feature.base.domain.models.GalleryAlbum
 import ru.leisure.imgur.feature.base.domain.models.GalleryItem
 
 class ImgurRepositoryImpl(
@@ -18,6 +20,7 @@ class ImgurRepositoryImpl(
     private val dispatcher: Dispatcher,
     private val mediaConverter: MediaConverter = MediaConverter(),
     private val galleryItemConverter: GalleryItemConverter = GalleryItemConverter(),
+    private val galleryAlbumConverter: GalleryAlbumConverter = GalleryAlbumConverter(),
     private val galleryTagsConverter: GalleryTagsConverter = GalleryTagsConverter(),
     private val commentConverter: CommentConverter = CommentConverter()
 ) : ImgurRepository {
@@ -37,6 +40,17 @@ class ImgurRepositoryImpl(
         try {
             val gallery = dataSource.getGallery(page)
             galleryItemConverter.convert(gallery.data)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            throw DataLoadingException(e)
+        }
+    }
+
+    override suspend fun getAlbum(id: String): GalleryAlbum = withContext(dispatcher.io) {
+        try {
+            val gallery = dataSource.getAlbum(id)
+            galleryAlbumConverter.convert(gallery.data)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {

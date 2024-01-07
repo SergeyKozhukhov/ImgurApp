@@ -8,6 +8,8 @@ sealed class Media {
     abstract val title: String
     abstract val description: String?
     abstract val type: String
+    abstract val width: Int
+    abstract val height: Int
     abstract val name: String?
     abstract val section: String?
 
@@ -16,6 +18,8 @@ sealed class Media {
         override val title: String,
         override val description: String?,
         override val type: String,
+        override val width: Int,
+        override val height: Int,
         override val name: String?,
         override val section: String?,
         val link: URI,
@@ -26,6 +30,8 @@ sealed class Media {
         override val title: String,
         override val description: String?,
         override val type: String,
+        override val width: Int,
+        override val height: Int,
         override val name: String?,
         override val section: String?,
         val link: URI,
@@ -37,6 +43,8 @@ sealed class Media {
         override val title: String,
         override val description: String?,
         override val type: String,
+        override val width: Int,
+        override val height: Int,
         override val name: String?,
         override val section: String?,
         val link: URI,
@@ -48,6 +56,8 @@ sealed class Media {
         override val title: String,
         override val description: String?,
         override val type: String,
+        override val width: Int,
+        override val height: Int,
         override val name: String?,
         override val section: String?
     ) : Media()

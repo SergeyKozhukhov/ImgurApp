@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonMappingException
 import ru.leisure.imgur.feature.base.data.models.BasicEntity
 import ru.leisure.imgur.feature.base.data.models.CommentEntity
+import ru.leisure.imgur.feature.base.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryItemEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryTagsEntity
 import ru.leisure.imgur.feature.base.data.models.ImgurResponseException
@@ -30,6 +31,15 @@ interface ImgurDataSource {
         ImgurResponseException::class
     )
     fun getGallery(page: Int): BasicEntity<List<GalleryItemEntity>>
+
+    @WorkerThread
+    @Throws(
+        IOException::class,
+        JsonProcessingException::class,
+        JsonMappingException::class,
+        ImgurResponseException::class
+    )
+    fun getAlbum(id: String): BasicEntity<GalleryAlbumEntity>
 
     @WorkerThread
     @Throws(
