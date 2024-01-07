@@ -1,26 +1,24 @@
 package ru.leisure.imgur.feature.base.data.datasources
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.JsonMappingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.OkHttpClient
 import okhttp3.Request
+import ru.leisure.imgur.core.network.api.NetworkClient
+import ru.leisure.imgur.core.network.api.NetworkException
+import ru.leisure.imgur.core.parser.api.JsonParser
+import ru.leisure.imgur.core.parser.api.ParserException
 import ru.leisure.imgur.feature.base.BuildConfig
 import ru.leisure.imgur.feature.base.data.models.BasicEntity
 import ru.leisure.imgur.feature.base.data.models.CommentEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryAlbumEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryItemEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryTagsEntity
-import ru.leisure.imgur.feature.base.data.models.ImgurResponseException
 import ru.leisure.imgur.feature.base.data.models.MediaEntity
-import java.io.IOException
 
 class ImgurDataSourceImpl(
-    private val okHttpClient: OkHttpClient,
-    private val objectMapper: ObjectMapper
+    private val networkClient: NetworkClient,
+    private val jsonParser: JsonParser
 ) : ImgurDataSource {
 
     private val defaultMemesRequest = buildRequest(url = DEFAULT_MEMES_URL.toHttpUrl())
@@ -61,21 +59,10 @@ class ImgurDataSourceImpl(
         return makeRequest(request, commentsTypeReference)
     }
 
-    @Throws(
-        IOException::class,
-        JsonProcessingException::class,
-        JsonMappingException::class,
-        ImgurResponseException::class
-    )
+    @Throws(NetworkException::class, ParserException::class)
     private fun <T> makeRequest(request: Request, reference: TypeReference<T>): T {
-        val response = okHttpClient.newCall(request).execute()
-
-        if (response.isSuccessful) {
-            val result = response.body?.string() ?: throw ImgurResponseException()
-            return objectMapper.readValue(result, reference)
-        }
-
-        throw ImgurResponseException()
+        val result = networkClient.execute(request)
+        return jsonParser.parse(result, reference)
     }
 
     private fun buildRequest(url: HttpUrl) = Request.Builder()

@@ -4,5 +4,7 @@ import okhttp3.OkHttpClient
 
 interface NetworkProvider {
 
+    val networkClient: NetworkClient
+
     val okHttpClient: OkHttpClient
 }
