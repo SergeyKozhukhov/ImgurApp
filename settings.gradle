@@ -14,3 +14,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ImgurApp"
 include ':app'
+include ':core:base:base-factory'
+include ':core:coroutines:coroutines-api'
+include ':core:coroutines:coroutines-impl'
+include ':core:network:network-api'
+include ':core:network:network-impl'
+include ':core:parser:parser-api'
+include ':core:parser:parser-impl'
+include ':common:video'
+include ':feature:base'

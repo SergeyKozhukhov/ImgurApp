@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+    alias libs.plugins.kotlin.jvm
+    alias libs.plugins.ksp
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
+
+    api project(':core:parser:parser-api')
+
+    /* Dagger2 */
+    implementation libs.dagger
+    ksp libs.dagger.compiler
+
+    /* Jackson */
+    implementation libs.jackson.core
+    implementation libs.jackson.annotations
+    implementation libs.jackson.databind
+}
