@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
@@ -41,6 +43,7 @@ import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
 import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
 import ru.leisure.imgur.feature.base.presentation.gallery.GalleryUiState
 import ru.leisure.imgur.feature.base.presentation.gallery.GalleryViewModel
+import kotlin.math.abs
 
 @Composable
 fun GalleryItemScreen(
@@ -76,7 +79,11 @@ private fun SuccessUiState(
     gallery.indexOfFirst { it.id == id }.takeIf { it >= 0 }?.let { initIndex ->
         val pagerState = rememberPagerState(initialPage = initIndex, pageCount = { gallery.size })
         HorizontalPager(state = pagerState) { index ->
-            GalleryItemContent(gallery[index], modifier = Modifier.fillMaxSize())
+            GalleryItemContent(
+                item = gallery[index],
+                isCurrent = pagerState.currentPage == index,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
@@ -84,6 +91,7 @@ private fun SuccessUiState(
 @Composable
 private fun GalleryItemContent(
     item: GalleryItem,
+    isCurrent: Boolean,
     modifier: Modifier = Modifier,
     viewModel: GalleryItemViewModel = viewModel(
         key = item.id,
@@ -96,18 +104,25 @@ private fun GalleryItemContent(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     when (val state = uiState) {
         GalleryItemUiState.Idle, GalleryItemUiState.Loading -> LoadingUiState()
-        is GalleryItemUiState.Success -> SuccessItemUiState(uiState = state, modifier = modifier)
+        is GalleryItemUiState.Success -> SuccessItemUiState(
+            uiState = state,
+            isCurrent = isCurrent,
+            modifier = modifier
+        )
+
         is GalleryItemUiState.Error -> ErrorUiState(message = state.message)
     }
 }
 
 @Composable
 private fun SuccessItemUiState(
-    uiState: GalleryItemUiState.Success, modifier: Modifier = Modifier
+    uiState: GalleryItemUiState.Success,
+    isCurrent: Boolean,
+    modifier: Modifier = Modifier
 ) {
     when (val item = uiState.galleryItem) {
-        is GalleryAlbum -> GalleryAlbumContent(item, uiState.comments, modifier)
-        is GalleryMedia -> GalleryMediaContent(item, uiState.comments, modifier)
+        is GalleryAlbum -> GalleryAlbumContent(item, uiState.comments, isCurrent, modifier)
+        is GalleryMedia -> GalleryMediaContent(item, uiState.comments, isCurrent, modifier)
     }
 }
 
@@ -116,12 +131,17 @@ private fun SuccessItemUiState(
 private fun GalleryAlbumContent(
     galleryAlbum: GalleryAlbum,
     comments: List<Comment>,
+    isCurrent: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
-        items(galleryAlbum.mediaList) { media ->
+    val listState = rememberLazyListState()
+    val centralItemIndex = findCentralItemIndex(listState)
+    LazyColumn(state = listState, modifier = modifier) {
+        itemsIndexed(galleryAlbum.mediaList) { index, media ->
             MediaContent(
-                media = media, modifier = Modifier
+                media = media,
+                isPlaybackAllowed = isCurrent && index == centralItemIndex,
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
@@ -131,16 +151,31 @@ private fun GalleryAlbumContent(
     }
 }
 
+private fun findCentralItemIndex(listState: LazyListState): Int? {
+    val layoutInfo = listState.layoutInfo
+    val visibleItems = layoutInfo.visibleItemsInfo
+    val visibleIndexes = visibleItems.map { it.index }
+    return if (visibleIndexes.size == 1) {
+        visibleIndexes.first()
+    } else {
+        val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+        val itemsFromCenter = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
+        itemsFromCenter.firstOrNull()?.index
+    }
+}
+
 @Composable
 private fun GalleryMediaContent(
     galleryMedia: GalleryMedia,
     comments: List<Comment>,
+    isCurrent: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         item {
             MediaContent(
                 galleryMedia.media,
+                isPlaybackAllowed = isCurrent,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
@@ -152,7 +187,11 @@ private fun GalleryMediaContent(
 }
 
 @Composable
-fun MediaContent(media: Media, modifier: Modifier = Modifier) {
+fun MediaContent(
+    media: Media,
+    isPlaybackAllowed: Boolean,
+    modifier: Modifier = Modifier
+) {
     when (media) {
         is Media.Image -> {
             AsyncImage(
@@ -170,7 +209,8 @@ fun MediaContent(media: Media, modifier: Modifier = Modifier) {
         is Media.Video -> {
             VideoPlayer(
                 url = media.link,
-                modifier = modifier.height(400.dp)
+                modifier = modifier.height(500.dp),
+                isPlaybackAllowed = isPlaybackAllowed
             )
         }
 

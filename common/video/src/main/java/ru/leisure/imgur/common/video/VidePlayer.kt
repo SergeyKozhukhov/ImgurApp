@@ -20,6 +20,7 @@ import java.net.URI
 fun VideoPlayer(
     url: URI,
     modifier: Modifier = Modifier,
+    isPlaybackAllowed: Boolean = true,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     var isPlayerAvailable by remember { mutableStateOf(false) }
@@ -29,7 +30,7 @@ fun VideoPlayer(
             VideoPlayerAdjuster(context)
         },
         update = { player ->
-            if (isPlayerAvailable) {
+            if (isPlaybackAllowed && isPlayerAvailable) {
                 player.initializePlayer(url)
             } else {
                 player.releasePlayer()
