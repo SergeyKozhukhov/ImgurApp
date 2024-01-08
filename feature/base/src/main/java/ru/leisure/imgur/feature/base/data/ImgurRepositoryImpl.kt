@@ -1,6 +1,6 @@
 package ru.leisure.imgur.feature.base.data
 
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runInterruptible
 import ru.leisure.imgur.core.coroutines.api.Dispatcher
 import ru.leisure.imgur.core.network.api.NetworkException
 import ru.leisure.imgur.core.parser.api.ParserException
@@ -10,6 +10,7 @@ import ru.leisure.imgur.feature.base.data.converters.GalleryItemConverter
 import ru.leisure.imgur.feature.base.data.converters.GalleryMediaConverter
 import ru.leisure.imgur.feature.base.data.converters.GalleryTagsConverter
 import ru.leisure.imgur.feature.base.data.converters.MediaConverter
+import ru.leisure.imgur.feature.base.data.converters.MediaTagConverter
 import ru.leisure.imgur.feature.base.data.datasources.ImgurDataSource
 import ru.leisure.imgur.feature.base.domain.ImgurRepository
 import ru.leisure.imgur.feature.base.domain.models.Comment
@@ -23,6 +24,7 @@ class ImgurRepositoryImpl(
     private val galleryAlbumConverter: GalleryAlbumConverter = GalleryAlbumConverter(),
     private val galleryMediaConverter: GalleryMediaConverter = GalleryMediaConverter(),
     private val galleryTagsConverter: GalleryTagsConverter = GalleryTagsConverter(),
+    private val mediaTagConverter: MediaTagConverter = MediaTagConverter(),
     private val commentConverter: CommentConverter = CommentConverter()
 ) : ImgurRepository {
 
@@ -51,6 +53,11 @@ class ImgurRepositoryImpl(
         galleryTagsConverter.convert(tags.data)
     }
 
+    override suspend fun getMediaTag(tag: String) = execute {
+        val mediaTag = dataSource.getMediaTag(tag)
+        mediaTagConverter.convert(mediaTag.data)
+    }
+
     override suspend fun searchGallery(query: String) = execute {
         val gallery = dataSource.searchGallery(query)
         galleryItemConverter.convert(gallery.data)
@@ -61,7 +68,7 @@ class ImgurRepositoryImpl(
         commentConverter.convert(comments.data)
     }
 
-    private suspend fun <T> execute(block: () -> T): T = withContext(dispatcher.io) {
+    private suspend fun <T> execute(block: () -> T): T = runInterruptible(dispatcher.io) {
         try {
             block.invoke()
         } catch (e: NetworkException) {

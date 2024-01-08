@@ -10,6 +10,7 @@ import ru.leisure.imgur.feature.base.data.models.GalleryItemEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryMediaEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryTagsEntity
 import ru.leisure.imgur.feature.base.data.models.MediaEntity
+import ru.leisure.imgur.feature.base.data.models.MediaTagEntity
 
 interface ImgurDataSource {
 
@@ -32,6 +33,10 @@ interface ImgurDataSource {
     @WorkerThread
     @Throws(NetworkException::class, ParserException::class)
     fun getDefaultGalleryTags(): BasicEntity<GalleryTagsEntity>
+
+    @WorkerThread
+    @Throws(NetworkException::class, ParserException::class)
+    fun getMediaTag(tag: String): BasicEntity<MediaTagEntity>
 
     @WorkerThread
     @Throws(NetworkException::class, ParserException::class)

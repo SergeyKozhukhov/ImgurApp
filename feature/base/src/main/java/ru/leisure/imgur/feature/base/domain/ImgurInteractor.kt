@@ -8,6 +8,7 @@ import ru.leisure.imgur.feature.base.domain.models.GalleryItem
 import ru.leisure.imgur.feature.base.domain.models.GalleryMedia
 import ru.leisure.imgur.feature.base.domain.models.GalleryTags
 import ru.leisure.imgur.feature.base.domain.models.Media
+import ru.leisure.imgur.feature.base.domain.models.MediaTag
 
 interface ImgurInteractor {
 
@@ -25,6 +26,9 @@ interface ImgurInteractor {
 
     @Throws(DataLoadingException::class, CancellationException::class)
     suspend fun getDefaultGalleryTags(): GalleryTags
+
+    @Throws(DataLoadingException::class, CancellationException::class)
+    suspend fun getMediaTag(tag: String): MediaTag
 
     @Throws(DataLoadingException::class, CancellationException::class)
     suspend fun searchGallery(query: String): List<GalleryItem>

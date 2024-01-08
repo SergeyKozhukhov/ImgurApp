@@ -16,6 +16,7 @@ import ru.leisure.imgur.feature.base.data.models.GalleryItemEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryMediaEntity
 import ru.leisure.imgur.feature.base.data.models.GalleryTagsEntity
 import ru.leisure.imgur.feature.base.data.models.MediaEntity
+import ru.leisure.imgur.feature.base.data.models.MediaTagEntity
 
 class ImgurDataSourceImpl(
     private val networkClient: NetworkClient,
@@ -35,6 +36,8 @@ class ImgurDataSourceImpl(
         object : TypeReference<BasicEntity<GalleryMediaEntity>>() {}
     private val defaultGalleryTagsTypeReference =
         object : TypeReference<BasicEntity<GalleryTagsEntity>>() {}
+    private val mediaTagTypeReference =
+        object : TypeReference<BasicEntity<MediaTagEntity>>() {}
     private val commentsTypeReference =
         object : TypeReference<BasicEntity<List<CommentEntity>>>() {}
 
@@ -56,6 +59,11 @@ class ImgurDataSourceImpl(
     }
 
     override fun getDefaultGalleryTags() = makeRequest(tagsRequest, defaultGalleryTagsTypeReference)
+
+    override fun getMediaTag(tag: String): BasicEntity<MediaTagEntity> {
+        val request = buildRequest(formMediaTagUrl(tag))
+        return makeRequest(request, mediaTagTypeReference)
+    }
 
     override fun searchGallery(query: String): BasicEntity<List<GalleryItemEntity>> {
         val request = buildRequest(formSearchUrl(query))
@@ -93,6 +101,7 @@ class ImgurDataSourceImpl(
         const val GALLERY_ALBUM_URL = "$GALLERY/album"
         const val GALLERY_MEDIA_URL = "$GALLERY/image"
         const val DEFAULT_GALLERY_TAGS_URL = "$IMGUR/3/tags"
+        const val MEDIA_TAG_URL = "$GALLERY/t"
         const val SEARCH_GALLERY_URL = "$GALLERY/search?q="
 
         fun formGalleryUrl(page: Int) = "$GALLERY_URL/$page".toHttpUrl()
@@ -102,6 +111,8 @@ class ImgurDataSourceImpl(
         fun formGalleryAlbumUrl(id: String) = "$GALLERY_ALBUM_URL/$id".toHttpUrl()
 
         fun formGalleryMediaUrl(id: String) = "$GALLERY_MEDIA_URL/$id".toHttpUrl()
+
+        fun formMediaTagUrl(tag: String) = "$MEDIA_TAG_URL/$tag".toHttpUrl()
 
         fun formCommentsUrl(id: String) = "$GALLERY/$id/$COMMENTS".toHttpUrl()
     }

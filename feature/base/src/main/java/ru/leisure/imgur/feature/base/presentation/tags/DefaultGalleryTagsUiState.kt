@@ -1,16 +1,13 @@
 package ru.leisure.imgur.feature.base.presentation.tags
 
-import androidx.compose.runtime.Immutable
 import ru.leisure.imgur.feature.base.domain.models.GalleryTags
+import ru.leisure.imgur.feature.base.domain.models.MediaTag
 
-@Immutable
-sealed interface DefaultGalleryTagsUiState {
-
-    object Idle : DefaultGalleryTagsUiState
-
-    object Loading : DefaultGalleryTagsUiState
-
-    data class Success(val tags: GalleryTags) : DefaultGalleryTagsUiState
-
-    data class Error(val message: String) : DefaultGalleryTagsUiState
-}
+data class DefaultGalleryTagsUiState(
+    val isDefaultTagsLoading: Boolean = false,
+    val defaultTags: GalleryTags? = null,
+    val defaultTagsError: String? = null,
+    val isMediaTagLoading: Boolean = false,
+    val mediaTag: MediaTag? = null,
+    val mediaTagError: String? = null
+)
