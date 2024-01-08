@@ -18,7 +18,8 @@
 7. [Navigation graph: SharedViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-apis#vm-api-navgraph)
 8. [Nested navigation: SharedViewModel](https://developer.android.com/jetpack/compose/libraries#hilt-navigation)
 9. [Media streaming with ExoPlayer](https://developer.android.com/codelabs/exoplayer-intro#0)
-10. [Migrate your build to version catalogs](https://developer.android.com/build/migrate-to-catalogs#groovy)
+10. [Using ExoPlayer in LazyColumn](https://www.droidcon.com/2021/08/17/using-exoplayer-in-lazycolumn/)
+11. [Migrate your build to version catalogs](https://developer.android.com/build/migrate-to-catalogs#groovy)
 
 ### Tools
 

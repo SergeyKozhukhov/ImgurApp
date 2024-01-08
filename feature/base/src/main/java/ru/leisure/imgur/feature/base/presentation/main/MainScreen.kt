@@ -63,7 +63,7 @@ private fun MainScreenContent(navController: NavHostController, modifier: Modifi
         modifier = modifier
     ) {
         galleryGraph(navController = navController)
-        composable(MainScreenContent.DefaultGalleryTags.route) { TagsScreen(onItemClick = {}) }
+        composable(MainScreenContent.DefaultGalleryTags.route) { TagsScreen(onTopicClick = {}) }
         memesGraph(navController = navController)
     }
 }

@@ -63,9 +63,8 @@ private fun GalleryAlbumThumbnail(
     onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val media = galleryAlbum.mediaList.first()
     ThumbnailCard(
-        media = media,
+        media = galleryAlbum.cover,
         title = galleryAlbum.title,
         isAlbum = true,
         score = galleryAlbum.score,

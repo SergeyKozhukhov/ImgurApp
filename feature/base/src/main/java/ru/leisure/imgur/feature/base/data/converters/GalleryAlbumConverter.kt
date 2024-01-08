@@ -8,16 +8,23 @@ class GalleryAlbumConverter(
     private val uriConverter: UriConverter = UriConverter()
 ) {
 
-    fun convert(source: GalleryAlbumEntity) =
-        GalleryAlbum(
+    fun convert(source: GalleryAlbumEntity): GalleryAlbum {
+        val mediaList = mediaConverter.convert(source.mediaList)
+        return GalleryAlbum(
             id = source.id,
             title = source.title,
+            cover = mediaList.firstOrNull { it.id == source.cover } ?: mediaList.first(),
+            coverId = source.cover,
+            coverWidth = source.coverWidth,
+            coverHeight = source.coverHeight,
+            views = source.views,
             link = uriConverter.convert(source.link),
             score = source.score,
             commentCount = source.commentCount,
             mediaCount = source.mediaCount,
-            mediaList = mediaConverter.convert(source.mediaList)
+            mediaList = mediaList
         )
+    }
 
     fun convert(sourceList: List<GalleryAlbumEntity>) = sourceList.map { convert(it) }
 }

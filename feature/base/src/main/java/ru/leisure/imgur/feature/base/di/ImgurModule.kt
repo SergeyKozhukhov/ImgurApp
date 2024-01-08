@@ -1,10 +1,10 @@
 package ru.leisure.imgur.feature.base.di
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
 import ru.leisure.imgur.core.coroutines.api.Dispatcher
+import ru.leisure.imgur.core.network.api.NetworkClient
+import ru.leisure.imgur.core.parser.api.JsonParser
 import ru.leisure.imgur.feature.base.data.ImgurRepositoryImpl
 import ru.leisure.imgur.feature.base.data.datasources.ImgurDataSource
 import ru.leisure.imgur.feature.base.data.datasources.ImgurDataSourceImpl
@@ -17,14 +17,14 @@ object ImgurModule {
 
     @Provides
     fun provideImgurInteractor(
-        okHttpClient: OkHttpClient,
-        objectMapper: ObjectMapper,
+        networkClient: NetworkClient,
+        jsonParser: JsonParser,
         dispatcher: Dispatcher
     ): ImgurInteractor {
 
         val imgurDataSource: ImgurDataSource = ImgurDataSourceImpl(
-            okHttpClient = okHttpClient,
-            objectMapper = objectMapper
+            networkClient = networkClient,
+            jsonParser = jsonParser
         )
 
         val repository: ImgurRepository = ImgurRepositoryImpl(

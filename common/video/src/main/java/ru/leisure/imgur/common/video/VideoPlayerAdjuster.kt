@@ -3,7 +3,6 @@ package ru.leisure.imgur.common.video
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -27,13 +26,16 @@ class VideoPlayerAdjuster : PlayerView {
 
     @androidx.media3.common.util.UnstableApi
     fun initializePlayer(url: URI) {
+        setShowPreviousButton(false)
+        setShowNextButton(false)
+        controllerAutoShow = false
+        setShowBuffering(SHOW_BUFFERING_ALWAYS)
         exoPlayer = ExoPlayer.Builder(context)
             .build()
             .also { exoPlayer ->
                 player = exoPlayer
                 val mediaItem = MediaItem.fromUri(url.toString())
                 exoPlayer.setMediaItems(listOf(mediaItem), mediaItemIndex, playbackPosition)
-                exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
                 exoPlayer.playWhenReady = playWhenReady
                 exoPlayer.addListener(playbackStateListener)
                 exoPlayer.prepare()
