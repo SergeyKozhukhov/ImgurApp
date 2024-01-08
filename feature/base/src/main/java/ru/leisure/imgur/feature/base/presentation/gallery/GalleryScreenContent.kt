@@ -1,4 +1,4 @@
-package ru.leisure.imgur.feature.base.presentation.gallery.list
+package ru.leisure.imgur.feature.base.presentation.gallery
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument

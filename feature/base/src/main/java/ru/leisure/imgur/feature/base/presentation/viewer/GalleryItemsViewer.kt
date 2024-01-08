@@ -1,9 +1,8 @@
-package ru.leisure.imgur.feature.base.presentation.gallery.item
+package ru.leisure.imgur.feature.base.presentation.viewer
 
-import android.os.Build.VERSION.SDK_INT
+import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -41,38 +39,11 @@ import ru.leisure.imgur.feature.base.domain.models.GalleryMedia
 import ru.leisure.imgur.feature.base.domain.models.Media
 import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
 import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
-import ru.leisure.imgur.feature.base.presentation.gallery.GalleryUiState
-import ru.leisure.imgur.feature.base.presentation.gallery.GalleryViewModel
 import kotlin.math.abs
-
-@Composable
-fun GalleryItemScreen(
-    id: String,
-    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModel.Factory),
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Gray)
-    ) {
-        val uiState by galleryViewModel.uiState.collectAsStateWithLifecycle()
-        when (val state = uiState) {
-            GalleryUiState.Idle, GalleryUiState.Loading -> LoadingUiState()
-            is GalleryUiState.Success -> SuccessUiState(id = id, gallery = state.gallery)
-            is GalleryUiState.Error -> ErrorUiState(message = state.message)
-        }
-    }
-}
-
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun SuccessUiState(
+fun GalleryItemsViewer(
     id: String,
     gallery: List<GalleryItem>,
 ) {
@@ -112,6 +83,16 @@ private fun GalleryItemContent(
 
         is GalleryItemUiState.Error -> ErrorUiState(message = state.message)
     }
+}
+
+@Composable
+private fun LoadingUiState() {
+    ProgressBar(modifier = Modifier.fillMaxSize())
+}
+
+@Composable
+private fun ErrorUiState(message: String) {
+    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -216,7 +197,7 @@ fun MediaContent(
 
         is Media.Animation -> {
             val imageLoader = ImageLoader.Builder(LocalContext.current)
-                .components { add(if (SDK_INT >= 28) ImageDecoderDecoder.Factory() else GifDecoder.Factory()) }
+                .components { add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder.Factory() else GifDecoder.Factory()) }
                 .build()
             Image(
                 painter = rememberAsyncImagePainter(
@@ -244,10 +225,4 @@ private fun ViewStructure(views: Int) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(text = "$views views")
     }
-}
-
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }

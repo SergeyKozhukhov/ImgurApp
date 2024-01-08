@@ -8,9 +8,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import ru.leisure.imgur.feature.base.presentation.gallery.item.GalleryItemScreen
-import ru.leisure.imgur.feature.base.presentation.gallery.list.GalleryListScreen
-import ru.leisure.imgur.feature.base.presentation.gallery.list.GalleryScreenContent
 import ru.leisure.imgur.feature.base.presentation.main.MainScreenContent
 
 fun NavGraphBuilder.galleryGraph(navController: NavController) {

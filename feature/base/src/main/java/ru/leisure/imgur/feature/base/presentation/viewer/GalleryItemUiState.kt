@@ -1,4 +1,4 @@
-package ru.leisure.imgur.feature.base.presentation.gallery.item
+package ru.leisure.imgur.feature.base.presentation.viewer
 
 import androidx.compose.runtime.Immutable
 import ru.leisure.imgur.feature.base.domain.models.Comment

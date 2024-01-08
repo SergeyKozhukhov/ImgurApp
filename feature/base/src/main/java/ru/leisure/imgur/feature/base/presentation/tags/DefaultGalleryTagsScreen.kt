@@ -40,6 +40,7 @@ import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
 fun TagsScreen(
     viewModel: DefaultGalleryTagsViewModel = viewModel(factory = DefaultGalleryTagsViewModel.Factory),
     onTopicClick: (String) -> Unit,
+    onGalleryItemClick: (String) -> Unit
 ) {
     LaunchedEffect(Unit) { viewModel.loadGalleryTags() }
 
@@ -52,7 +53,8 @@ fun TagsScreen(
         mediaTag = uiState.mediaTag,
         mediaTagError = uiState.mediaTagError,
         onTagClick = { tag -> viewModel.onTagClick(tag) },
-        onTopicClick = onTopicClick
+        onTopicClick = onTopicClick,
+        onGalleryItemClick = onGalleryItemClick
     )
 
     uiState.defaultTagsError?.let { ErrorUiState(message = it) }
@@ -71,6 +73,7 @@ private fun SuccessUiState(
     mediaTagError: String?,
     onTagClick: (String) -> Unit,
     onTopicClick: (String) -> Unit,
+    onGalleryItemClick: (String) -> Unit
 ) {
     TagsContainer(
         galleryTags = galleryTags,
@@ -82,7 +85,7 @@ private fun SuccessUiState(
                 LoadingUiState()
             } else if (mediaTag != null) {
                 MediaTagTitle(mediaTag.name)
-                MediaTagItems(mediaTag)
+                MediaTagItems(mediaTag, onGalleryItemClick)
             } else if (mediaTagError != null) {
                 ErrorUiState(message = mediaTagError)
             }
@@ -198,14 +201,17 @@ fun MediaTagTitle(title: String) {
 }
 
 @Composable
-private fun MediaTagItems(mediaTag: MediaTag) {
+private fun MediaTagItems(
+    mediaTag: MediaTag,
+    onGalleryItemClick: (String) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3)
     ) {
-        items(mediaTag.items) {
+        items(mediaTag.items) { galleryItem ->
             StrictGalleryItemThumbnail(
-                it,
-                onItemClick = { },
+                galleryItem,
+                onItemClick = { onGalleryItemClick.invoke(galleryItem.id) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)

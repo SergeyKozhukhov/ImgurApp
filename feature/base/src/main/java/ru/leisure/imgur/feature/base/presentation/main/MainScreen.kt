@@ -16,12 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.leisure.imgur.feature.base.presentation.gallery.galleryGraph
 import ru.leisure.imgur.feature.base.presentation.memes.memesGraph
-import ru.leisure.imgur.feature.base.presentation.tags.TagsScreen
+import ru.leisure.imgur.feature.base.presentation.tags.tagsGraph
 import ru.leisure.imgur.feature.base.presentation.ui.theme.ImgurAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +62,7 @@ private fun MainScreenContent(navController: NavHostController, modifier: Modifi
         modifier = modifier
     ) {
         galleryGraph(navController = navController)
-        composable(MainScreenContent.DefaultGalleryTags.route) { TagsScreen(onTopicClick = {}) }
+        tagsGraph(navController = navController)
         memesGraph(navController = navController)
     }
 }

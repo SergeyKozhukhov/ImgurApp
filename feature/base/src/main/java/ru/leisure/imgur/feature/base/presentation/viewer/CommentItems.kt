@@ -1,4 +1,4 @@
-package ru.leisure.imgur.feature.base.presentation.gallery.item
+package ru.leisure.imgur.feature.base.presentation.viewer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
