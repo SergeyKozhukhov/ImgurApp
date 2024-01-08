@@ -37,8 +37,8 @@ import ru.leisure.imgur.feature.base.domain.models.GalleryAlbum
 import ru.leisure.imgur.feature.base.domain.models.GalleryItem
 import ru.leisure.imgur.feature.base.domain.models.GalleryMedia
 import ru.leisure.imgur.feature.base.domain.models.Media
-import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
-import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
+import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
+import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -83,16 +83,6 @@ private fun GalleryItemContent(
 
         is GalleryItemUiState.Error -> ErrorUiState(message = state.message)
     }
-}
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
-}
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }
 
 @Composable

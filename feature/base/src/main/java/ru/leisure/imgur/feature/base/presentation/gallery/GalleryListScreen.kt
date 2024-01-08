@@ -2,7 +2,6 @@ package ru.leisure.imgur.feature.base.presentation.gallery
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.leisure.imgur.feature.base.domain.models.GalleryItem
-import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
+import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
 import ru.leisure.imgur.feature.base.presentation.components.GalleryItemThumbnail
-import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
+import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 
 @Composable
 fun GalleryListScreen(
@@ -46,12 +45,6 @@ fun GalleryListScreen(
 
         is GalleryUiState.Error -> ErrorUiState(message = (uiState as GalleryUiState.Error).message)
     }
-}
-
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -93,9 +86,4 @@ private fun SearchBar(onSearchClick: (String) -> Unit, modifier: Modifier = Modi
             Text(text = "Search")
         }
     }
-}
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }

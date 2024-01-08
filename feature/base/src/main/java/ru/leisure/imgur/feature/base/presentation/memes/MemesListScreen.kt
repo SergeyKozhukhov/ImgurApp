@@ -2,7 +2,6 @@ package ru.leisure.imgur.feature.base.presentation.memes
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,8 +30,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.feature.base.R
 import ru.leisure.imgur.feature.base.domain.models.Media
-import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
-import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
+import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
+import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 
 @Composable
 fun MemesListScreen(
@@ -51,12 +50,6 @@ fun MemesListScreen(
 
         is MemesUiState.Error -> ErrorUiState(message = (uiState as MemesUiState.Error).message)
     }
-}
-
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -127,9 +120,3 @@ private fun MemeItem(
         }
     }
 }
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
-}
-

@@ -15,8 +15,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.leisure.imgur.feature.base.R
 import ru.leisure.imgur.feature.base.domain.models.Media
-import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
-import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
+import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
+import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 
 @Composable
 fun MemesItemScreen(
@@ -33,11 +33,6 @@ fun MemesItemScreen(
 
         is MemesUiState.Error -> ErrorUiState(message = (uiState as MemesUiState.Error).message)
     }
-}
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -86,10 +81,5 @@ private fun MemeItem(
             Text("Unknown")
         }
     }
-}
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }
 

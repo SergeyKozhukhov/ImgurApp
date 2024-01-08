@@ -3,7 +3,6 @@ package ru.leisure.imgur.feature.base.presentation.tags
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,9 +30,9 @@ import ru.leisure.imgur.feature.base.domain.models.GalleryTags
 import ru.leisure.imgur.feature.base.domain.models.MediaTag
 import ru.leisure.imgur.feature.base.domain.models.Tag
 import ru.leisure.imgur.feature.base.domain.models.Topic
-import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
+import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
 import ru.leisure.imgur.feature.base.presentation.components.GalleryItemThumbnail
-import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
+import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 
 
 @Composable
@@ -58,11 +57,6 @@ fun TagsScreen(
     )
 
     uiState.defaultTagsError?.let { ErrorUiState(message = it) }
-}
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -219,9 +213,4 @@ private fun MediaTagItems(
             )
         }
     }
-}
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }

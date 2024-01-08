@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.leisure.imgur.feature.base.presentation.components.ErrorMessage
-import ru.leisure.imgur.feature.base.presentation.components.ProgressBar
+import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
+import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 import ru.leisure.imgur.feature.base.presentation.viewer.GalleryItemsViewer
 
 @Composable
@@ -30,15 +30,4 @@ fun GalleryItemScreen(
             is GalleryUiState.Error -> ErrorUiState(message = state.message)
         }
     }
-}
-
-
-@Composable
-private fun LoadingUiState() {
-    ProgressBar(modifier = Modifier.fillMaxSize())
-}
-
-@Composable
-private fun ErrorUiState(message: String) {
-    ErrorMessage(message = message, modifier = Modifier.fillMaxSize())
 }
