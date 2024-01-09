@@ -1,12 +1,10 @@
 package ru.leisure.imgur.feature.base.presentation.tags
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
@@ -20,9 +18,7 @@ fun GalleryItemScreen(
     viewModel: DefaultGalleryTagsViewModel = viewModel(factory = DefaultGalleryTagsViewModel.Factory),
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Gray)
+        modifier = Modifier.fillMaxSize()
     ) {
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         if (isTopicItem) {

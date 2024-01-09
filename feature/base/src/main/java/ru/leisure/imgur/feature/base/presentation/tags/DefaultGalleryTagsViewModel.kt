@@ -26,6 +26,7 @@ class DefaultGalleryTagsViewModel(
                 _uiState.update { it.copy(isDefaultTagsLoading = true) }
                 val tags = interactor.getDefaultGalleryTags()
                 _uiState.value = DefaultGalleryTagsUiState(defaultTags = tags)
+                tags.tags.firstOrNull()?.let { onTagClick(it.name) }
             } catch (e: DataLoadingException) {
                 _uiState.value = DefaultGalleryTagsUiState(defaultTagsError = e.toString())
             }
@@ -36,7 +37,7 @@ class DefaultGalleryTagsViewModel(
         if (uiState.value.mediaTag?.name == tag) return
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(isMediaTagLoading = true) }
+                _uiState.update { it.copy(isMediaTagLoading = true, mediaTag = null) }
                 val mediaTag = interactor.getMediaTag(tag)
                 _uiState.update { it.copy(isMediaTagLoading = false, mediaTag = mediaTag) }
             } catch (e: DataLoadingException) {

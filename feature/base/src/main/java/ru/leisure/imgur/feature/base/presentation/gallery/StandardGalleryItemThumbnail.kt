@@ -121,7 +121,7 @@ private fun ThumbnailCard(
 ) {
     Column(modifier = modifier) {
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             onClick = onClick,
             border = BorderStroke(1.dp, Color.DarkGray),
             modifier = Modifier.height(180.dp)

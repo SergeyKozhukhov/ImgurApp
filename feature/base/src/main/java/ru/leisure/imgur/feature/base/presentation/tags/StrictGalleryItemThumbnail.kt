@@ -1,11 +1,18 @@
 package ru.leisure.imgur.feature.base.presentation.tags
 
+import android.os.Build
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
@@ -17,13 +24,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import ru.leisure.imgur.feature.base.R
 import ru.leisure.imgur.feature.base.domain.models.GalleryAlbum
@@ -95,19 +107,19 @@ private fun ThumbnailCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         onClick = onClick,
-        modifier = modifier,
-
-        ) {
+        border = BorderStroke(1.dp, Color.DarkGray),
+        modifier = modifier
+    ) {
         Box(modifier = Modifier.weight(0.7f)) {
             when (media) {
                 is Media.Image -> {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(media.link.toString())
-                            .placeholder(R.drawable.ic_launcher_foreground)
-                            .error(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.placeholder)
+                            .error(R.drawable.error)
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
@@ -116,31 +128,49 @@ private fun ThumbnailCard(
                 }
 
                 is Media.Animation -> {
-                    Text(
-                        text = "Animation",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Green)
-                            .padding(4.dp)
+                    val imageLoader = ImageLoader.Builder(LocalContext.current)
+                        .components { add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder.Factory() else GifDecoder.Factory()) }
+                        .build()
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(media.link.toString())
+                                .placeholder(R.drawable.placeholder)
+                                .error(R.drawable.error)
+                                .build(), imageLoader
+                        ),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
 
                 is Media.Video -> {
-                    Text(
-                        text = "Video",
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Yellow)
-                            .padding(4.dp)
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .align(Alignment.TopEnd),
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
+                            .padding(top = 4.dp, start = 4.dp, end = 4.dp)
+                            .fillMaxSize()
+                            .border(BorderStroke(1.dp, Color.DarkGray), RoundedCornerShape(corner = CornerSize(12.dp))),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LoadingAnimation(modifier = Modifier.padding(12.dp).fillMaxSize())
+                        Icon(
+                            modifier = Modifier
+                                .background(
+                                    Brush.radialGradient(
+                                        0.0f to Color.Black.copy(alpha = 0.4f),
+                                        0.3f to Color.Black.copy(alpha = 0.3f),
+                                        0.5f to Color.Black.copy(alpha = 0.1f),
+                                        1.0f to Color.Transparent,
+                                    ),
+                                    shape = CircleShape
+                                )
+                                .padding(8.dp),
+                            imageVector = Icons.Filled.PlayArrow,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                 }
 
                 is Media.Unknown -> {

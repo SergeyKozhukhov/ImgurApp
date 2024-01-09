@@ -1,5 +1,6 @@
 package ru.leisure.imgur.feature.base.presentation.tags
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -136,13 +138,26 @@ private fun TagItem(
     modifier: Modifier = Modifier
 ) {
     Card(
-        colors = if (isSelected) CardDefaults.elevatedCardColors() else CardDefaults.cardColors(),
+        colors = if (isSelected) CardDefaults.cardColors() else CardDefaults.elevatedCardColors(),
         onClick = { onTagClick.invoke(tag.name) },
+        border = BorderStroke(1.dp, Color.DarkGray),
         modifier = modifier
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
-            Text(text = tag.displayName)
-            Text(text = "Posts: ${tag.totalItems}")
+            Text(
+                text = tag.displayName,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = MaterialTheme.typography.titleSmall
+            )
+            Text(
+                text = "Posts: ${tag.totalItems}",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -199,7 +214,8 @@ private fun MediaTagItems(
     onGalleryItemClick: (String) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3)
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.padding(top = 4.dp)
     ) {
         items(mediaTag.items) { galleryItem ->
             StrictGalleryItemThumbnail(
