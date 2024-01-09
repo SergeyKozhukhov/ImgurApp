@@ -48,7 +48,7 @@ fun GalleryItemsViewer(
 ) {
     gallery.indexOfFirst { it.id == id }.takeIf { it >= 0 }?.let { initIndex ->
         val pagerState = rememberPagerState(initialPage = initIndex, pageCount = { gallery.size })
-        HorizontalPager(state = pagerState) { index ->
+        HorizontalPager(state = pagerState, beyondBoundsPageCount = 1) { index ->
             GalleryItemContent(
                 item = gallery[index],
                 isCurrent = pagerState.currentPage == index,
@@ -97,6 +97,7 @@ private fun SuccessItemUiState(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun GalleryAlbumContent(
     galleryAlbum: GalleryAlbum,
@@ -167,7 +168,8 @@ fun MediaContent(
             VideoPlayer(
                 url = media.link,
                 modifier = modifier.height(500.dp),
-                isPlaybackAllowed = isPlaybackAllowed
+                isPlaybackAllowed = isPlaybackAllowed,
+                isSoundEnabled = true
             )
         }
 
@@ -187,7 +189,6 @@ fun MediaContent(
                 contentScale = ContentScale.Crop,
                 modifier = modifier
             )
-            Text("Animation", modifier = modifier)
         }
 
         is Media.Unknown -> {
@@ -198,7 +199,9 @@ fun MediaContent(
 
 @Composable
 private fun ViewStructure(views: Int) {
-    Box(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = 8.dp)) {
         Text(text = "$views views")
     }
 }

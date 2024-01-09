@@ -35,7 +35,9 @@ import ru.leisure.imgur.feature.base.presentation.ui.theme.Purple40
 fun LazyListScope.commentItems(comments: List<Comment>) {
     if (comments.isNotEmpty()) {
         item {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Row(
+                Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            ) {
                 Icon(
                     imageVector = Icons.Sharp.Email,
                     contentDescription = null,
@@ -57,9 +59,9 @@ fun LazyListScope.commentItems(comments: List<Comment>) {
 }
 
 @Composable
-private fun CommentItem(comment: Comment) {
+private fun CommentItem(comment: Comment, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .border(1.dp, Color.DarkGray, RoundedCornerShape(12.dp)),
@@ -85,16 +87,14 @@ private fun CommentItem(comment: Comment) {
         ) {
             Text(
                 text = comment.author,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = comment.comment,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium
             )
         }

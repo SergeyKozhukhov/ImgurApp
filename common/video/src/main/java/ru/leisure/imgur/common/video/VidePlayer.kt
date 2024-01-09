@@ -23,6 +23,7 @@ fun VideoPlayer(
     isPlaybackAllowed: Boolean = true,
     useController: Boolean = true,
     useLooping: Boolean = false,
+    isSoundEnabled: Boolean = true,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     var isPlayerAvailable by remember { mutableStateOf(false) }
@@ -39,6 +40,7 @@ fun VideoPlayer(
             }
             player.useController(useController)
             player.useLooping(useLooping)
+            player.setSoundEnabled(isSoundEnabled)
         },
         modifier = modifier
     )

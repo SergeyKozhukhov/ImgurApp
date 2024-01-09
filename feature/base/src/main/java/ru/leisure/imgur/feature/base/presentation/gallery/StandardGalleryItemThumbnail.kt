@@ -180,7 +180,8 @@ private fun ThumbnailCard(
                             modifier = modifier.height(180.dp),
                             isPlaybackAllowed = isPlaybackAllowed,
                             useController = false,
-                            useLooping = true
+                            useLooping = true,
+                            isSoundEnabled = false
                         )
                         Text(
                             modifier = Modifier

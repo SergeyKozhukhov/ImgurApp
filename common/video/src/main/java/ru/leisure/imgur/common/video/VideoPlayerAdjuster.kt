@@ -52,6 +52,10 @@ class VideoPlayerAdjuster : PlayerView {
         exoPlayer?.repeatMode = if (shouldLoop) REPEAT_MODE_ONE else REPEAT_MODE_OFF
     }
 
+    fun setSoundEnabled(isSoundEnabled: Boolean) {
+        player?.volume = if (isSoundEnabled) 1f else 0f
+    }
+
     fun releasePlayer() {
         exoPlayer?.let { exoPlayer ->
             playbackPosition = exoPlayer.currentPosition
