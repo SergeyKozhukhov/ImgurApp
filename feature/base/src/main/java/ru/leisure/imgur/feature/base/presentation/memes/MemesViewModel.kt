@@ -18,7 +18,6 @@ class MemesViewModel(
     val uiState: StateFlow<MemesUiState> get() = _uiState.asStateFlow()
     private val _uiState: MutableStateFlow<MemesUiState> = MutableStateFlow(MemesUiState.Loading)
 
-
     fun loadMemes() {
         viewModelScope.launch {
             try {
@@ -29,7 +28,6 @@ class MemesViewModel(
             }
         }
     }
-
 
     companion object {
 
