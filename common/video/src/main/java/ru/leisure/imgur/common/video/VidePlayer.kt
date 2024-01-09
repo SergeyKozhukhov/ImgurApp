@@ -21,6 +21,8 @@ fun VideoPlayer(
     url: URI,
     modifier: Modifier = Modifier,
     isPlaybackAllowed: Boolean = true,
+    useController: Boolean = true,
+    useLooping: Boolean = false,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     var isPlayerAvailable by remember { mutableStateOf(false) }
@@ -35,6 +37,8 @@ fun VideoPlayer(
             } else {
                 player.releasePlayer()
             }
+            player.useController(useController)
+            player.useLooping(useLooping)
         },
         modifier = modifier
     )

@@ -1,13 +1,18 @@
 package ru.leisure.imgur.feature.base.presentation.gallery
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.leisure.imgur.feature.base.domain.models.GalleryItem
 import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
-import ru.leisure.imgur.feature.base.presentation.components.GalleryItemThumbnail
 import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
+import ru.leisure.imgur.feature.base.presentation.utils.findCentralItemIndex
 
 @Composable
 fun GalleryListScreen(
@@ -54,13 +59,16 @@ private fun SuccessUiState(
     onItemClick: (String) -> Unit
 ) {
     Column {
-        SearchBar(onSearchClick = onSearchClick)
-        LazyColumn {
-            items(gallery) { galleryItem ->
-                GalleryItemThumbnail(
+        SearchBar(onSearchClick = onSearchClick, modifier = Modifier.padding(vertical = 6.dp))
+        val listState = rememberLazyListState()
+        val centralItemIndex = listState.findCentralItemIndex()
+        LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(24.dp)) {
+            itemsIndexed(gallery) { index, galleryItem ->
+                StandardGalleryItemThumbnail(
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(horizontal = 24.dp)
                         .fillMaxWidth(),
+                    isPlaybackAllowed = index == centralItemIndex,
                     onItemClick = onItemClick,
                     galleryItem = galleryItem,
                 )
@@ -73,17 +81,24 @@ private fun SuccessUiState(
 @Composable
 private fun SearchBar(onSearchClick: (String) -> Unit, modifier: Modifier = Modifier) {
     var inputText by remember { mutableStateOf("") }
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
         OutlinedTextField(
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier
+                .weight(0.7f)
+                .padding(4.dp),
             value = inputText,
             onValueChange = { inputText = it },
-            label = { Text(text = "Input") }
+            label = { Text(text = "Input") },
+            singleLine = true,
+            trailingIcon = {
+                IconButton(onClick = { onSearchClick.invoke(inputText) }) {
+                    Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
+                }
+            }
         )
-        Button(
-            modifier = Modifier.padding(4.dp),
-            onClick = { onSearchClick.invoke(inputText) }) {
-            Text(text = "Search")
-        }
     }
 }

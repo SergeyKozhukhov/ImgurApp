@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Player.REPEAT_MODE_OFF
+import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import java.net.URI
@@ -40,6 +42,14 @@ class VideoPlayerAdjuster : PlayerView {
                 exoPlayer.addListener(playbackStateListener)
                 exoPlayer.prepare()
             }
+    }
+
+    fun useController(shouldUse: Boolean) {
+        useController = shouldUse
+    }
+
+    fun useLooping(shouldLoop: Boolean) {
+        exoPlayer?.repeatMode = if (shouldLoop) REPEAT_MODE_ONE else REPEAT_MODE_OFF
     }
 
     fun releasePlayer() {

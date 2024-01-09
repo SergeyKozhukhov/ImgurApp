@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
@@ -39,7 +38,7 @@ import ru.leisure.imgur.feature.base.domain.models.GalleryMedia
 import ru.leisure.imgur.feature.base.domain.models.Media
 import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
 import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
-import kotlin.math.abs
+import ru.leisure.imgur.feature.base.presentation.utils.findCentralItemIndex
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -106,7 +105,7 @@ private fun GalleryAlbumContent(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
-    val centralItemIndex = findCentralItemIndex(listState)
+    val centralItemIndex = listState.findCentralItemIndex()
     LazyColumn(state = listState, modifier = modifier) {
         itemsIndexed(galleryAlbum.mediaList) { index, media ->
             MediaContent(
@@ -119,19 +118,6 @@ private fun GalleryAlbumContent(
         }
         item { ViewStructure(galleryAlbum.views) }
         commentItems(comments)
-    }
-}
-
-private fun findCentralItemIndex(listState: LazyListState): Int? {
-    val layoutInfo = listState.layoutInfo
-    val visibleItems = layoutInfo.visibleItemsInfo
-    val visibleIndexes = visibleItems.map { it.index }
-    return if (visibleIndexes.size == 1) {
-        visibleIndexes.first()
-    } else {
-        val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
-        val itemsFromCenter = visibleItems.sortedBy { abs((it.offset + it.size / 2) - midPoint) }
-        itemsFromCenter.firstOrNull()?.index
     }
 }
 
@@ -168,8 +154,8 @@ fun MediaContent(
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(media.link.toString())
-                    .placeholder(R.drawable.baseline_panorama_60)
-                    .error(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.error)
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -193,8 +179,8 @@ fun MediaContent(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(media.link.toString())
-                        .placeholder(R.drawable.baseline_panorama_60)
-                        .error(R.drawable.ic_launcher_background)
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.error)
                         .build(), imageLoader
                 ),
                 contentDescription = null,
@@ -212,7 +198,7 @@ fun MediaContent(
 
 @Composable
 private fun ViewStructure(views: Int) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
         Text(text = "$views views")
     }
 }

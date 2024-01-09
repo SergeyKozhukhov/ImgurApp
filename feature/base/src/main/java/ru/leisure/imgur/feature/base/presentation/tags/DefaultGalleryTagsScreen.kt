@@ -31,7 +31,6 @@ import ru.leisure.imgur.feature.base.domain.models.MediaTag
 import ru.leisure.imgur.feature.base.domain.models.Tag
 import ru.leisure.imgur.feature.base.domain.models.Topic
 import ru.leisure.imgur.feature.base.presentation.components.ErrorUiState
-import ru.leisure.imgur.feature.base.presentation.components.GalleryItemThumbnail
 import ru.leisure.imgur.feature.base.presentation.components.LoadingUiState
 
 
@@ -171,7 +170,7 @@ private fun TopicItem(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleMedium
         )
-        GalleryItemThumbnail(
+        OblongGalleryItemThumbnail(
             topic.topPost,
             onItemClick = onItemClick,
             modifier = Modifier
