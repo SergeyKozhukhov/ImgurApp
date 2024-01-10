@@ -1,4 +1,75 @@
-# Links
+# ImgurApp
+
+Приложение является клиентом к сервису изображений Imgur.
+[Imgur](https://apidocs.imgur.com) - онлайн-сервис загрузки, хранения и обмена фото-изображений.
+
+Приложение оперирует понятиями Media, GalleryAlbum, GalleryMedia, Gallery:
+
+- Media - изображение, анимация или видео;
+- GalleryAlbum - альбом - контейнер списка Media;
+- GalleryMedia - Media - единица, доступная для отображения;
+- Gallery - хранилище альбомов и media - единиц.
+
+Приложение позволяет отображать галереи, альбомы и media - единицы.
+
+Поддерживаются стандартные форматы изображений, gif, mp4.
+
+## Возможности
+
+- Отображение галерей;
+- поиск альбомов и media - единиц;
+- отображение списка media и комментариев альбома;
+- отображение наиболее популярного альбома или media - единицы;
+- отображение стандартного списка тегов;
+- отображение альбомов и media - единиц по тегу;
+- отображение списка мемов.
+
+## Техническая реаилизация
+
+- Многомодульность;
+- Clean Architecture;
+- Dagger2;
+- Compose;
+- Compose Navigation;
+- MVVM;
+- Coroutines;
+- OkHttp;
+- Jackson;
+- Coil;
+- ExoPlayer.
+
+Модули:
+
+Core:
+
+- Api/Impl coroutines;
+- Api/Impl network;
+- Api/Impl parser.
+
+Common:
+
+- Video.
+
+Feature:
+
+- Base с клиентом к Imgur.
+
+
+## Примеры
+
+![Галерея](screens/gallery.png)
+
+![Альбом](screens/album.png)
+
+![Комментарии](screens/comments.png)
+
+![Теги](screens/tags_topics.png)
+
+![Видео](screens/video.png)
+
+![Изображения](screens/images.png)
+
+## Ссылки
 
 ### Open API
 
@@ -7,7 +78,7 @@
 3. [Imgur: gallery](https://api.imgur.io/endpoints/gallery)
 4. [Imgur: search](https://apidocs.imgur.com/#3c981acf-47aa-488f-b068-269f65aee3ce)
 
-### Ways
+### Способы
 
 1. [Avoid uploading sensitive info to GitHub](https://dev.to/leehendryp/avoid-versioning-api-keys-and-sensitive-info-on-android-here-s-how-56e1)
 2. [Remove private signing information from your project](https://developer.android.com/build/gradle-tips#remove-private-signing-information-from-your-project)
@@ -21,11 +92,11 @@
 10. [Using ExoPlayer in LazyColumn](https://www.droidcon.com/2021/08/17/using-exoplayer-in-lazycolumn/)
 11. [Migrate your build to version catalogs](https://developer.android.com/build/migrate-to-catalogs#groovy)
 
-### Tools
+### Средства
 
 1. [Consuming flows safely in Jetpack Compose: collectAsStateWithLifecycle](https://scribe.rip/androiddevelopers/consuming-flows-safely-in-jetpack-compose-cde014d0d5a3)
 
-### Dependencies
+### Зависимости
 
 1. [Kotlin Android plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.android)
 2. [Compose to Kotlin Compatibility Map](https://developer.android.com/jetpack/androidx/releases/compose-kotlin)
@@ -41,6 +112,6 @@
 12. [Jackson-databind: maven](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-databind/2.15.2/jar)
 13. [Dagger2: KSP](https://dagger.dev/dev-guide/ksp)
 
-### Research
+### Поиски
 
 1. [Jackson polymorphic deserialization](https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization?ref=igorski.co)
